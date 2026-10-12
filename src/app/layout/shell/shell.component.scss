@@ -25,17 +25,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   background: #ffffff;
   flex-shrink: 0;
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 .app-brand-name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 19px;
+  font-size: 21px;
   letter-spacing: 0.01em;
   color: #ffffff;
 }

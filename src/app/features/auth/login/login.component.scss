@@ -51,32 +51,48 @@
   z-index: 1;
 }
 
+// Le texte "Immogix" fait partie du logo (meme lockup que la sidebar,
+// icone + mot-symbole cote a cote), pas un titre separe.
+.login-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.75rem;
+}
+
 .login-brand-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 0.6rem;
-  background: var(--p-primary-600);
-  color: #fff;
-  margin-bottom: 1.5rem;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  flex-shrink: 0;
 
-  .pi {
-    font-size: 1.25rem;
+  svg {
+    width: 2.1rem;
+    height: 2.1rem;
   }
+}
+
+.login-brand-wordmark {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .login-brand-content h1 {
   font-size: 2.1rem;
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 0.9rem;
+  margin: 0 0 0.75rem;
 }
 
-.login-brand-content p {
+.login-brand-tagline {
   font-size: 0.95rem;
-  line-height: 1.6;
+  letter-spacing: 0.01em;
   color: rgba(255, 255, 255, 0.82);
   margin: 0 0 1.75rem;
 }
@@ -152,15 +168,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.75rem;
-  background: var(--p-primary-600);
-  color: #fff;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 0.85rem;
+  background: var(--accent-soft);
   margin: 0 auto 1rem;
 
-  .pi {
-    font-size: 1.35rem;
+  svg {
+    width: 2.1rem;
+    height: 2.1rem;
   }
 }
 
