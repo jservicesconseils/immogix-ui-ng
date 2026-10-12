@@ -21,6 +21,17 @@
   gap: 10px;
 }
 
+.app-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #ffffff;
+  flex-shrink: 0;
+}
+
 .app-brand-name {
   font-family: var(--font-display);
   font-weight: 600;

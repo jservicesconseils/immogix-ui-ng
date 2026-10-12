@@ -1,0 +1,10 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Toit -->
+  <polygon points="32,28 68,10 92,45 58,55" fill="#2B7CE2" />
+  <!-- Mur droit (face avant) -->
+  <polygon points="58,55 92,45 92,78 58,92" fill="#1D5FA8" />
+  <!-- Mur gauche (face laterale, legerement detachee) -->
+  <polygon points="24,37 46,48 46,82 24,73" fill="#1B4F88" />
+  <!-- Porte -->
+  <polygon points="46,68 56,72 56,92 46,88" fill="#2B7CE2" />
+</svg>
