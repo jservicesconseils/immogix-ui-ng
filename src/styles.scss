@@ -1,9 +1,37 @@
 @import "primeicons/primeicons.css";
 
+/* Jetons calques sur jservicesconseils/cornalix-ui (meme structure de
+   variables, meme reglette d'utilitaires) -- seule la teinte change :
+   bleu ici plutot que le sarcelle de Cornalix. */
 :root {
   --app-font: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   --app-sidebar-width: 260px;
   --app-topbar-height: 64px;
+
+  --paper: #f7f9fc;
+  --surface: #ffffff;
+  --surface-alt: #eef1f7;
+  --ink: #101828;
+  --ink-soft: #475467;
+  --ink-faint: #667085;
+  --line: #e4e8f0;
+  --line-strong: #cbd4e3;
+  --accent: #1d4ed8;
+  --accent-strong: #1e3a8a;
+  --accent-soft: #dce7fb;
+  --accent-tint: #f1f5fe;
+  --yes: #2f8f5b;
+  --yes-soft: #e3f3ea;
+  --partial: #b9852a;
+  --partial-soft: #fbf0de;
+  --no: #b14a3a;
+  --no-soft: #f7e4e0;
+
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'JetBrains Mono', monospace;
+
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.05);
 }
 
 * {
@@ -15,9 +43,95 @@ body {
   height: 100%;
   margin: 0;
   font-family: var(--app-font);
-  background: var(--p-surface-50);
-  color: var(--p-surface-900);
+  background: var(--paper);
+  color: var(--ink);
   -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.page-subtitle {
+  color: var(--ink-faint);
+  font-size: 14px;
+  font-weight: 400;
+  margin: 6px 0 0;
+}
+
+.card-title {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--accent-strong);
+  }
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--surface-alt);
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-weight: 600;
+  flex-shrink: 0;
+
+  &--yes {
+    background: var(--yes-soft);
+    color: var(--yes);
+  }
+  &--partial {
+    background: var(--partial-soft);
+    color: var(--partial);
+  }
+  &--no {
+    background: var(--no-soft);
+    color: var(--no);
+  }
 }
 
 /* Icone dans un encadre colore : motif repete sur les cartes KPI, la
@@ -98,15 +212,17 @@ body {
   flex-wrap: wrap;
 
   h1 {
+    font-family: var(--font-display);
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--p-surface-900);
+    color: var(--ink);
     margin: 0 0 0.25rem 0;
+    letter-spacing: -0.02em;
   }
 
   p {
     margin: 0;
-    color: var(--p-surface-500);
+    color: var(--ink-faint);
     font-size: 0.925rem;
   }
 }
@@ -117,11 +233,14 @@ body {
   color: #dc2626;
 }
 
+/* Meme carte que .card dans cornalix-ui, en gardant le nom historique
+   .surface-card (deja utilise par toutes les pages) pour n'avoir aucun
+   template a toucher -- seul l'habillage visuel change. */
 .surface-card {
-  background: var(--p-surface-0);
-  border: 1px solid var(--p-surface-200);
-  border-radius: 1rem;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
 }
 
 /* Onglets (p-tabs) : la barre qui contient les onglets (p-tablist)
@@ -220,4 +339,34 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--p-surface-300);
   border-radius: 4px;
+}
+
+/* Impression (ex. export PDF via window.print()) : masque le chrome
+   applicatif (sidebar/topbar/voile) et laisse le contenu paginer sur
+   plusieurs pages au lieu de rester contraint au viewport -- meme regle
+   que cornalix-ui, regle globale car .app-shell/.app-sidebar/.app-topbar/
+   .app-content sont definis dans ShellComponent. */
+@media print {
+  .app-sidebar,
+  .sidebar-backdrop,
+  .hamburger-btn,
+  .app-topbar {
+    display: none !important;
+  }
+
+  .app-shell,
+  .app-main {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .app-content {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #fff;
+  }
 }

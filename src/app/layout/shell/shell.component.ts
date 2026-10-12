@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
+import { MenuModule } from 'primeng/menu';
 import { AuthService } from '../../core/auth/auth.service';
 
 interface NavItem {
@@ -11,10 +12,16 @@ interface NavItem {
   route: string;
 }
 
+/**
+ * Meme structure/style que le Shell de cornalix-ui (jservicesconseils/
+ * cornalix-ui) : sidebar degradee avec logo + nav, tiroir hors-canevas
+ * sous 860px, topbar avec menu utilisateur en p-menu -- seule la teinte
+ * change (bleu plutot que sarcelle, voir immogix-preset.ts/styles.scss).
+ */
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AvatarModule, ButtonModule, TooltipModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AvatarModule, ButtonModule, MenuModule],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
@@ -23,6 +30,7 @@ export class ShellComponent {
   private readonly router = inject(Router);
 
   readonly session = this.auth.session;
+  readonly mobileNavOpen = signal(false);
 
   // Liste et ordre alignes sur la maquette de reference (ecran 09). Les
   // routes sans page dediee dans ce MVP pointent vers une page "bientot
@@ -44,6 +52,10 @@ export class ShellComponent {
     { label: 'Règles juridictionnelles', icon: 'pi pi-shield', route: '/admin/jurisdiction-rules' },
   ];
 
+  readonly userMenuItems: MenuItem[] = [
+    { label: 'Déconnexion', icon: 'pi pi-sign-out', command: () => this.logout() },
+  ];
+
   initials(): string {
     const name = this.session()?.displayName ?? '';
     return name
@@ -53,6 +65,14 @@ export class ShellComponent {
       .slice(0, 2)
       .join('')
       .toUpperCase();
+  }
+
+  toggleMobileNav(): void {
+    this.mobileNavOpen.update((open) => !open);
+  }
+
+  closeMobileNav(): void {
+    this.mobileNavOpen.set(false);
   }
 
   logout(): void {

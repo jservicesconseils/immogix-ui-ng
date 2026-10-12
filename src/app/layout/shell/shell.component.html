@@ -1,10 +1,36 @@
 <div class="app-shell">
-  <aside class="app-sidebar">
+  @if (mobileNavOpen()) {
+    <div class="sidebar-backdrop" (click)="closeMobileNav()"></div>
+  }
+
+  <aside class="app-sidebar" [class.app-sidebar--open]="mobileNavOpen()">
     <div class="app-brand">
-      <div class="app-brand-icon">
-        <i class="pi pi-building"></i>
-      </div>
-      <span class="app-brand-name">Gestion Immobilière</span>
+      <svg viewBox="0 0 100 120" width="24" height="29" role="img" aria-label="Symbole Immogix">
+        <defs>
+          <clipPath id="sidebarShieldClip">
+            <path d="M50 4 L92 20 V54 C92 86 72 106 50 116 C28 106 8 86 8 54 V20 Z" />
+          </clipPath>
+        </defs>
+        <g clip-path="url(#sidebarShieldClip)">
+          <rect x="0" y="0" width="50" height="120" fill="#1e3a8a" />
+          <rect x="50" y="0" width="50" height="120" fill="#60a5fa" />
+        </g>
+        <path
+          d="M50 4 L92 20 V54 C92 86 72 106 50 116 C28 106 8 86 8 54 V20 Z"
+          fill="none"
+          stroke="#FFFFFF"
+          stroke-width="4"
+        />
+        <path
+          d="M32 60 L45 74 L70 42"
+          fill="none"
+          stroke="#FFFFFF"
+          stroke-width="9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <span class="app-brand-name">IMMOGIX</span>
     </div>
 
     <nav class="app-nav">
@@ -14,16 +40,26 @@
           [routerLink]="item.route"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: false }"
+          (click)="closeMobileNav()"
         >
           <i [class]="item.icon"></i>
           <span>{{ item.label }}</span>
         </a>
       }
     </nav>
+
+    <a class="app-help-link" href="#">
+      <i class="pi pi-question-circle"></i>
+      Aide
+    </a>
   </aside>
 
   <div class="app-main">
     <header class="app-topbar">
+      <button type="button" class="hamburger-btn" aria-label="Ouvrir le menu" (click)="toggleMobileNav()">
+        <i class="pi pi-bars"></i>
+      </button>
+
       <div class="app-topbar-org">
         <span class="icon-box icon-box-sm icon-box-primary"><i class="pi pi-briefcase"></i></span>
         <div>
@@ -32,13 +68,20 @@
         </div>
       </div>
 
-      <div class="app-topbar-user">
-        <p-avatar [label]="initials()" shape="circle" styleClass="app-user-avatar" />
-        <div class="app-topbar-user-info">
-          <div class="app-topbar-user-name">{{ session()?.displayName }}</div>
-          <div class="app-topbar-user-sub">Connecté</div>
-        </div>
-        <p-button icon="pi pi-sign-out" [text]="true" [rounded]="true" severity="secondary" (onClick)="logout()" pTooltip="Déconnexion" />
+      <div class="app-topbar-actions">
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <i class="pi pi-bell"></i>
+        </button>
+
+        <button type="button" class="user-menu-trigger" (click)="userMenu.toggle($event)">
+          <p-avatar [label]="initials()" shape="circle" styleClass="app-user-avatar" />
+          <span class="user-menu-text">
+            <span class="user-menu-name">{{ session()?.displayName }}</span>
+            <span class="user-menu-role">Connecté</span>
+          </span>
+          <i class="pi pi-chevron-down"></i>
+        </button>
+        <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
       </div>
     </header>
 

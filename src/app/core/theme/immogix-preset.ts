@@ -2,57 +2,68 @@ import { definePreset } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
 
 /**
- * Palette alignee sur la maquette de reference (12 ecrans) : bleu
- * "blue-600" comme couleur primaire (boutons, liens, etapes actives),
- * gris ardoise neutre pour les surfaces. Les couleurs semantiques
- * (success/danger/warn) restent celles d'Aura, deja coherentes.
+ * Theme PrimeNG derive d'Aura, meme structure que CornalixPreset
+ * (jservicesconseils/cornalix-ui) mais recale sur une palette bleue --
+ * "meme visuel, meme librairie, seule la couleur change".
  */
 export const ImmogixPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{blue.50}',
-      100: '{blue.100}',
-      200: '{blue.200}',
-      300: '{blue.300}',
-      400: '{blue.400}',
-      500: '{blue.500}',
-      600: '{blue.600}',
-      700: '{blue.700}',
-      800: '{blue.800}',
-      900: '{blue.900}',
-      950: '{blue.950}',
+      50: '#EBF2FE',
+      100: '#CFE0FC',
+      200: '#A6C5F9',
+      300: '#7AA7F5',
+      400: '#4F89F0',
+      500: '#2563EB',
+      600: '#1D4ED8',
+      700: '#1E40AF',
+      800: '#1E3A8A',
+      900: '#172554',
+      950: '#0B1530',
     },
     colorScheme: {
       light: {
         surface: {
-          0: '#ffffff',
-          50: '{slate.50}',
-          100: '{slate.100}',
-          200: '{slate.200}',
-          300: '{slate.300}',
-          400: '{slate.400}',
-          500: '{slate.500}',
-          600: '{slate.600}',
-          700: '{slate.700}',
-          800: '{slate.800}',
-          900: '{slate.900}',
-          950: '{slate.950}',
+          0: '#FFFFFF',
+          50: '#F1F4F9',
+          100: '#E6EAF2',
+          200: '#CBD4E3',
+          300: '#A9B7D1',
+          400: '#8A9BBD',
+          500: '#7C8EAE',
+          600: '#5F7090',
+          700: '#485A74',
+          800: '#2E3C57',
+          900: '#13203A',
+          950: '#0A1222',
+        },
+        primary: {
+          color: '#1D4ED8',
+          contrastColor: '#FFFFFF',
+          hoverColor: '#1E40AF',
+          activeColor: '#1E3A8A',
+        },
+        highlight: {
+          background: '#DCE7FB',
+          focusBackground: '#CFE0FC',
+          color: '#1E40AF',
+          focusColor: '#1E40AF',
         },
       },
       dark: {
         surface: {
-          0: '#ffffff',
-          50: '{slate.50}',
-          100: '{slate.100}',
-          200: '{slate.200}',
-          300: '{slate.300}',
-          400: '{slate.400}',
-          500: '{slate.500}',
-          600: '{slate.600}',
-          700: '{slate.700}',
-          800: '{slate.800}',
-          900: '{slate.900}',
-          950: '{slate.950}',
+          0: '#FFFFFF',
+          50: '#F1F4F9',
+          100: '#E6EAF2',
+          200: '#CBD4E3',
+          300: '#A9B7D1',
+          400: '#8A9BBD',
+          500: '#7C8EAE',
+          600: '#5F7090',
+          700: '#485A74',
+          800: '#2E3C57',
+          900: '#13203A',
+          950: '#0A1222',
         },
       },
     },
