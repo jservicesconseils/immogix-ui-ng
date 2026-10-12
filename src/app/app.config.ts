@@ -8,7 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 import { routes } from './app.routes';
-import { ImmotranPreset } from './core/theme/immotran-preset';
+import { ImmogixPreset } from './core/theme/immogix-preset';
 import { authInterceptor } from './core/auth/auth.interceptor';
 
 registerLocaleData(localeFrCa);
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     ConfirmationService,
     providePrimeNG({
       theme: {
-        preset: ImmotranPreset,
+        preset: ImmogixPreset,
         options: {
           darkModeSelector: '.app-dark',
           cssLayer: {

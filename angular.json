@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "immotran-ui-ng": {
+    "immogix-ui-ng": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,10 +67,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "immotran-ui-ng:build:production"
+              "buildTarget": "immogix-ui-ng:build:production"
             },
             "development": {
-              "buildTarget": "immotran-ui-ng:build:development"
+              "buildTarget": "immogix-ui-ng:build:development"
             }
           },
           "defaultConfiguration": "development"

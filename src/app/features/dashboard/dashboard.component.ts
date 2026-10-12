@@ -7,7 +7,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { APPLICATION_STATUS_LABELS, ApplicationStatus } from '../../core/models/application.model';
 import { DashboardResponse, RecentApplicationResponse } from '../../core/models/dashboard.model';
-import { CHART_COLORS } from '../../core/theme/immotran-preset';
+import { CHART_COLORS } from '../../core/theme/immogix-preset';
 
 // Libelles simplifies pour le badge "Dossiers recents" (voir maquette,
 // ecran 09) : En attente / En etude / Approuve / Refuse, plus synthetiques
@@ -99,7 +99,7 @@ export class DashboardComponent {
         this.loading.set(false);
       },
       error: () => {
-        this.error.set("Impossible de charger le tableau de bord. Verifiez que l'API immotran-ms-core est demarree.");
+        this.error.set("Impossible de charger le tableau de bord. Verifiez que l'API immogix-ms-core est demarree.");
         this.loading.set(false);
       },
     });

@@ -3,12 +3,12 @@ import { SignJWT } from 'jose';
 import { environment } from '../../../environments/environment';
 import { Session } from './session.model';
 
-const STORAGE_KEY = 'immotran.session';
-const TOKEN_KEY = 'immotran.token';
+const STORAGE_KEY = 'immogix.session';
+const TOKEN_KEY = 'immogix.token';
 
 /**
  * Authentification locale (HS256) utilisee tant qu'aucun User Pool
- * Cognito n'est deploye pour immotran-ms-identity (voir infra/bootstrap
+ * Cognito n'est deploye pour immogix-ms-identity (voir infra/bootstrap
  * et infra/dev/identity dans ce repo). Les backends doivent tourner
  * avec le profil Spring "local", qui accepte un jeton signe avec le
  * MEME secret partage (voir environment.mockAuthSharedSecret) au lieu

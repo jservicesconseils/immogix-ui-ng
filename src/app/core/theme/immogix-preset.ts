@@ -7,7 +7,7 @@ import Aura from '@primeuix/themes/aura';
  * gris ardoise neutre pour les surfaces. Les couleurs semantiques
  * (success/danger/warn) restent celles d'Aura, deja coherentes.
  */
-export const ImmotranPreset = definePreset(Aura, {
+export const ImmogixPreset = definePreset(Aura, {
   semantic: {
     primary: {
       50: '{blue.50}',
