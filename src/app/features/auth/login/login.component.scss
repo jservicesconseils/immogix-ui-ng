@@ -8,168 +8,28 @@
   height: 100%;
 }
 
-// Panneau bleu compose en HTML/CSS -- degrade + formes decoratives
-// floutees en arriere-plan, contenu (logo/slogan/grille/skyline) au
-// premier plan. Aucune image raster : la mise en page s'adapte a
-// n'importe quel ratio de panneau sans jamais recadrer ou laisser de
-// bordure, contrairement aux tentatives precedentes avec une photo
-// fournie telle quelle.
+// Panneau bleu : image de marque fournie par l'utilisateur (voir
+// login.component.html). Ratio de l'image (1408x1760 = 0.8) tres
+// proche du ratio habituel du panneau -- background-size: contain
+// affiche l'image en entier (jamais de recadrage du logo, de la photo,
+// des icones ou du bas de page), et le degrade en second plan (meme
+// diagonale bas-gauche fonce -> haut-droit clair que l'image, couleurs
+// echantillonnees sur ses coins) rend la fine bande residuelle de
+// contain invisible sur les ratios de panneau qui s'ecartent de 0.8.
 .login-brand {
   position: relative;
   flex: 1.15;
   min-height: 100%;
-  overflow: hidden;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #0f2e82 100%);
-  display: flex;
-  align-items: center;
-  padding: 3.5rem;
+  background-image:
+    url('/brand/login-hero.png'),
+    linear-gradient(to top right, #00308c 0%, #1f7bee 100%);
+  background-size: contain, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
 
   @media (max-width: 900px) {
     display: none;
   }
-}
-
-// Formes decoratives floutees, purement visuelles (aria-hidden) --
-// apportent de la profondeur au degrade sans dependre d'une image
-// externe, donc sans aucun risque de recadrage.
-.login-brand-decor {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.login-brand-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-}
-
-.login-brand-blob-1 {
-  width: 26rem;
-  height: 26rem;
-  top: -8rem;
-  right: -9rem;
-  background: rgba(96, 165, 250, 0.45);
-}
-
-.login-brand-blob-2 {
-  width: 20rem;
-  height: 20rem;
-  bottom: -7rem;
-  left: -6rem;
-  background: rgba(30, 58, 138, 0.55);
-}
-
-.login-brand-ring {
-  position: absolute;
-  top: 12%;
-  right: 8%;
-  width: 14rem;
-  height: 14rem;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-}
-
-.login-brand-content {
-  position: relative;
-  max-width: 480px;
-}
-
-// Le texte "Immogix" fait partie du logo (meme lockup que la sidebar,
-// icone + mot-symbole cote a cote), pas un titre separe.
-.login-brand-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 1.5rem;
-}
-
-.login-brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.75rem;
-  height: 3.75rem;
-  flex-shrink: 0;
-
-  svg {
-    width: 3.75rem;
-    height: 3.75rem;
-  }
-}
-
-.login-brand-wordmark {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.login-brand-tagline {
-  font-size: 1.05rem;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 2.5rem;
-}
-
-.login-feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem 1.25rem;
-  margin-bottom: 2.75rem;
-}
-
-.login-feature {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #ffffff;
-}
-
-.login-feature-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.16);
-  color: #ffffff;
-  flex-shrink: 0;
-  backdrop-filter: blur(2px);
-
-  .pi {
-    font-size: 1.15rem;
-  }
-}
-
-.login-brand-skyline {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.login-skyline-svg {
-  width: 140px;
-  height: auto;
-  flex-shrink: 0;
-}
-
-.login-brand-skyline p {
-  margin: 0;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.5;
 }
 
 .login-form-side {
