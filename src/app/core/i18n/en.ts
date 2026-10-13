@@ -86,8 +86,6 @@ export const EN: Record<string, string> = {
   'settings.propertyStatuses.createdToast': 'The property status was added.',
   'settings.propertyStatuses.updatedToast': 'The property status was updated.',
   'settings.propertyStatuses.deletedToast': 'The property status was deleted.',
-  'settings.form.nameEn': 'Name (English)',
-  'settings.form.nameFr': 'Name (French)',
   'settings.form.color': 'Badge color',
   'settings.deleteConfirm.message': 'Are you sure you want to delete "{{name}}"?',
   'settings.severity.success': 'Green (active)',

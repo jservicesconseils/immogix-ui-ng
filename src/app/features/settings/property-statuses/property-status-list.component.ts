@@ -45,8 +45,7 @@ export class PropertyStatusListComponent {
   ]);
 
   readonly form = this.fb.nonNullable.group({
-    nameEn: ['', [Validators.required, Validators.maxLength(100)]],
-    nameFr: ['', [Validators.required, Validators.maxLength(100)]],
+    name: ['', [Validators.required, Validators.maxLength(100)]],
     description: this.fb.control<string | null>(null, Validators.maxLength(300)),
     severity: this.fb.nonNullable.control<StatusSeverity>('info', Validators.required),
   });
@@ -77,18 +76,13 @@ export class PropertyStatusListComponent {
 
   openCreateDialog(): void {
     this.editingId.set(null);
-    this.form.reset({ nameEn: '', nameFr: '', description: null, severity: 'info' });
+    this.form.reset({ name: '', description: null, severity: 'info' });
     this.dialogVisible.set(true);
   }
 
   openEditDialog(propertyStatus: PropertyStatusOptionResponse): void {
     this.editingId.set(propertyStatus.id);
-    this.form.setValue({
-      nameEn: propertyStatus.nameEn,
-      nameFr: propertyStatus.nameFr,
-      description: propertyStatus.description,
-      severity: propertyStatus.severity,
-    });
+    this.form.setValue({ name: propertyStatus.name, description: propertyStatus.description, severity: propertyStatus.severity });
     this.dialogVisible.set(true);
   }
 
@@ -104,7 +98,7 @@ export class PropertyStatusListComponent {
 
     if (editingId) {
       this.propertyStatusOptionService
-        .update(editingId, { nameEn: value.nameEn, nameFr: value.nameFr, description: value.description, severity: value.severity })
+        .update(editingId, { name: value.name, description: value.description, severity: value.severity })
         .subscribe({
           next: () => {
             this.submitting.set(false);
@@ -127,7 +121,7 @@ export class PropertyStatusListComponent {
     }
 
     this.propertyStatusOptionService
-      .create({ organizationId, nameEn: value.nameEn, nameFr: value.nameFr, description: value.description, severity: value.severity })
+      .create({ organizationId, name: value.name, description: value.description, severity: value.severity })
       .subscribe({
         next: () => {
           this.submitting.set(false);

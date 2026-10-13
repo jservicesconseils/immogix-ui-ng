@@ -13,8 +13,8 @@ import {
 } from '../models/property.model';
 import { PropertyStatusRef } from '../models/option-ref.model';
 
-const SAMPLE_TYPE = { id: 'type-1', nameEn: 'Single-family home', nameFr: 'Maison individuelle' };
-const SAMPLE_STATUS: PropertyStatusRef = { id: 'status-1', nameEn: 'Vacant', nameFr: 'Vacante', severity: 'warn' };
+const SAMPLE_TYPE = { id: 'type-1', name: 'Maison individuelle' };
+const SAMPLE_STATUS: PropertyStatusRef = { id: 'status-1', name: 'Vacante', severity: 'warn' };
 
 describe('PropertyService', () => {
   let service: PropertyService;

@@ -6,8 +6,7 @@ import { StatusSeverity } from './option-ref.model';
 export interface PropertyStatusOptionResponse {
   id: string;
   organizationId: string;
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
   severity: StatusSeverity;
   createdAt: string;
@@ -15,15 +14,13 @@ export interface PropertyStatusOptionResponse {
 
 export interface CreatePropertyStatusOptionRequest {
   organizationId: string;
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
   severity: StatusSeverity;
 }
 
 export interface UpdatePropertyStatusOptionRequest {
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
   severity: StatusSeverity;
 }

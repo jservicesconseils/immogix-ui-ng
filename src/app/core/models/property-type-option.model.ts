@@ -5,21 +5,18 @@
 export interface PropertyTypeOptionResponse {
   id: string;
   organizationId: string;
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
   createdAt: string;
 }
 
 export interface CreatePropertyTypeOptionRequest {
   organizationId: string;
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
 }
 
 export interface UpdatePropertyTypeOptionRequest {
-  nameEn: string;
-  nameFr: string;
+  name: string;
   description: string | null;
 }

@@ -34,8 +34,7 @@ export class ApartmentTypeListComponent {
   readonly editingId = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    nameEn: ['', [Validators.required, Validators.maxLength(100)]],
-    nameFr: ['', [Validators.required, Validators.maxLength(100)]],
+    name: ['', [Validators.required, Validators.maxLength(100)]],
     description: this.fb.control<string | null>(null, Validators.maxLength(300)),
   });
 
@@ -71,7 +70,7 @@ export class ApartmentTypeListComponent {
 
   openEditDialog(apartmentType: ApartmentTypeResponse): void {
     this.editingId.set(apartmentType.id);
-    this.form.setValue({ nameEn: apartmentType.nameEn, nameFr: apartmentType.nameFr, description: apartmentType.description });
+    this.form.setValue({ name: apartmentType.name, description: apartmentType.description });
     this.dialogVisible.set(true);
   }
 
@@ -86,7 +85,7 @@ export class ApartmentTypeListComponent {
     this.submitting.set(true);
 
     if (editingId) {
-      this.apartmentTypeService.update(editingId, { nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
+      this.apartmentTypeService.update(editingId, { name: value.name, description: value.description }).subscribe({
         next: () => {
           this.submitting.set(false);
           this.dialogVisible.set(false);
@@ -107,7 +106,7 @@ export class ApartmentTypeListComponent {
       return;
     }
 
-    this.apartmentTypeService.create({ organizationId, nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
+    this.apartmentTypeService.create({ organizationId, name: value.name, description: value.description }).subscribe({
       next: () => {
         this.submitting.set(false);
         this.dialogVisible.set(false);

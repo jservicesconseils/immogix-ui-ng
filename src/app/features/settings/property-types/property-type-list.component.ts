@@ -34,8 +34,7 @@ export class PropertyTypeListComponent {
   readonly editingId = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    nameEn: ['', [Validators.required, Validators.maxLength(100)]],
-    nameFr: ['', [Validators.required, Validators.maxLength(100)]],
+    name: ['', [Validators.required, Validators.maxLength(100)]],
     description: this.fb.control<string | null>(null, Validators.maxLength(300)),
   });
 
@@ -71,7 +70,7 @@ export class PropertyTypeListComponent {
 
   openEditDialog(propertyType: PropertyTypeOptionResponse): void {
     this.editingId.set(propertyType.id);
-    this.form.setValue({ nameEn: propertyType.nameEn, nameFr: propertyType.nameFr, description: propertyType.description });
+    this.form.setValue({ name: propertyType.name, description: propertyType.description });
     this.dialogVisible.set(true);
   }
 
@@ -86,7 +85,7 @@ export class PropertyTypeListComponent {
     this.submitting.set(true);
 
     if (editingId) {
-      this.propertyTypeOptionService.update(editingId, { nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
+      this.propertyTypeOptionService.update(editingId, { name: value.name, description: value.description }).subscribe({
         next: () => {
           this.submitting.set(false);
           this.dialogVisible.set(false);
@@ -107,7 +106,7 @@ export class PropertyTypeListComponent {
       return;
     }
 
-    this.propertyTypeOptionService.create({ organizationId, nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
+    this.propertyTypeOptionService.create({ organizationId, name: value.name, description: value.description }).subscribe({
       next: () => {
         this.submitting.set(false);
         this.dialogVisible.set(false);

@@ -10,8 +10,7 @@
   <p-table [value]="propertyStatuses()" [loading]="loading()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
     <ng-template pTemplate="header">
       <tr>
-        <th>{{ 'settings.form.nameEn' | translate }}</th>
-        <th>{{ 'settings.form.nameFr' | translate }}</th>
+        <th>{{ 'common.name' | translate }}</th>
         <th>{{ 'common.description' | translate }}</th>
         <th class="actions-col"></th>
       </tr>
@@ -20,10 +19,9 @@
       <tr>
         <td>
           <div class="entity-name">
-            <p-tag [severity]="propertyStatus.severity" [value]="propertyStatus.nameEn" />
+            <p-tag [severity]="propertyStatus.severity" [value]="propertyStatus.name" />
           </div>
         </td>
-        <td>{{ propertyStatus.nameFr }}</td>
         <td>{{ propertyStatus.description || '—' }}</td>
         <td class="actions-col">
           <p-button icon="pi pi-pencil" [text]="true" severity="secondary" (onClick)="openEditDialog(propertyStatus)" />
@@ -33,7 +31,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="4" class="empty-state">
+        <td colspan="3" class="empty-state">
           <i class="pi pi-tag"></i>
           <p>{{ 'settings.propertyStatuses.emptyMessage' | translate }}</p>
         </td>
@@ -45,12 +43,8 @@
 <p-dialog [header]="(editingId() ? 'settings.propertyStatuses.editDialog' : 'settings.propertyStatuses.newDialog') | translate" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '30rem' }">
   <form [formGroup]="form" (ngSubmit)="submit()" class="entity-form">
     <div class="field">
-      <label for="nameEn">{{ 'settings.form.nameEn' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
-      <input pInputText id="nameEn" formControlName="nameEn" class="w-full" placeholder="e.g. Active" />
-    </div>
-    <div class="field">
-      <label for="nameFr">{{ 'settings.form.nameFr' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
-      <input pInputText id="nameFr" formControlName="nameFr" class="w-full" placeholder="ex. Actif" />
+      <label for="name">{{ 'common.name' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
+      <input pInputText id="name" formControlName="name" class="w-full" placeholder="ex. Actif" />
     </div>
     <div class="field">
       <label for="severity">{{ 'settings.form.color' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>

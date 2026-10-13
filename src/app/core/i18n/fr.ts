@@ -91,8 +91,6 @@ export const FR: Record<string, string> = {
   'settings.propertyStatuses.createdToast': 'Le statut de propriété a été ajouté.',
   'settings.propertyStatuses.updatedToast': 'Le statut de propriété a été modifié.',
   'settings.propertyStatuses.deletedToast': 'Le statut de propriété a été supprimé.',
-  'settings.form.nameEn': 'Nom (anglais)',
-  'settings.form.nameFr': 'Nom (français)',
   'settings.form.color': 'Couleur du badge',
   'settings.deleteConfirm.message': 'Voulez-vous vraiment supprimer « {{name}} » ?',
   'settings.severity.success': 'Vert (actif)',

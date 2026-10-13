@@ -1,12 +1,12 @@
 // Reference legere vers une entree d'une liste Parametres (type
 // d'appartement, type ou statut de propriete), embarquee dans
 // PropertyResponse/UnitResponse -- miroir de ca.immogix.core.settings.dto.OptionRef
-// cote backend. nameEn/nameFr permettent d'afficher le bon libelle selon
-// la langue active sans aller-retour supplementaire (voir I18nService).
+// cote backend. Un seul nom par entree : un utilisateur travaille dans
+// une seule langue a la fois (voir I18nService), la saisie n'est jamais
+// bilingue -- name est simplement ce que l'organisation a tape.
 export interface OptionRef {
   id: string;
-  nameEn: string;
-  nameFr: string;
+  name: string;
 }
 
 export type StatusSeverity = 'success' | 'warn' | 'danger' | 'secondary' | 'info';

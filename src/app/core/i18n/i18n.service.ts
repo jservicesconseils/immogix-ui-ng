@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { EN } from './en';
 import { FR } from './fr';
 import { Locale } from './locale';
@@ -19,7 +19,6 @@ export class I18nService {
   private readonly localeSignal = signal<Locale>(this.restoreLocale());
 
   readonly locale = this.localeSignal.asReadonly();
-  readonly isEnglish = computed(() => this.localeSignal() === 'en');
 
   setLocale(locale: Locale): void {
     this.localeSignal.set(locale);
@@ -44,14 +43,13 @@ export class I18nService {
     return value;
   }
 
-  // Choisit nameEn/nameFr selon la langue active, pour afficher un
-  // OptionRef (type d'appartement, type/statut de propriete) sans passer
-  // par le dictionnaire de traduction statique.
-  optionName(option: { nameEn: string; nameFr: string } | null | undefined): string {
-    if (!option) {
-      return '—';
-    }
-    return this.isEnglish() ? option.nameEn : option.nameFr;
+  // Un OptionRef (type d'appartement, type/statut de propriete) n'a
+  // qu'un seul nom -- saisi par l'organisation dans la langue qu'elle
+  // utilisait a ce moment-la, jamais traduit automatiquement (voir
+  // option-ref.model.ts). Ce helper reste utilise partout ou un OptionRef
+  // est affiche, simplement pour centraliser le repli "—" si absent.
+  optionName(option: { name: string } | null | undefined): string {
+    return option?.name ?? '—';
   }
 
   private restoreLocale(): Locale {
