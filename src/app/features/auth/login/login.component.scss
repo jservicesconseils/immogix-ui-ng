@@ -11,33 +11,42 @@
 // Panneau bleu : image de marque fournie telle quelle (logo, slogan,
 // grille de fonctionnalites, skyline et visuel hero deja composes dans
 // le fichier -- public/brand/login-hero.png), pas une recreation CSS.
+//
+// Le ratio du panneau (portrait) ne correspond pas au ratio de l'image
+// (paysage), donc background-size: contain laisse des bandes en haut
+// et en bas. Plutot que d'essayer de deviner une couleur/un degrade
+// qui matche exactement les bords, on utilise la technique du fond
+// flou : une copie agrandie et floutee de la MEME image remplit tout
+// le panneau (::before), et l'image nette par-dessus (::after) --
+// les bandes deviennent alors un prolongement flou de l'image elle-
+// meme, sans ligne de bordure visible.
 .login-brand {
   position: relative;
   flex: 1.15;
   min-height: 100%;
-  // Deuxieme calque : degrade horizontal echantillonne sur les bords
-  // de l'image (gauche fonce -> droite plus clair), pour que les
-  // bandes laissees par background-size: contain prolongent les
-  // couleurs de l'image au lieu de former une bordure visible.
-  background-image:
-    url('/brand/login-hero.png'),
-    linear-gradient(
-      to right,
-      #023b96 0%,
-      #013fa0 10%,
-      #0245aa 20%,
-      #0146b3 30%,
-      #0251c4 40%,
-      #025fd4 50%,
-      #0771e3 60%,
-      #097df0 70%,
-      #0c83f3 80%,
-      #1690fb 90%,
-      #1992f7 100%
-    );
-  background-size: contain, 100% 100%;
-  background-position: center, center;
-  background-repeat: no-repeat, no-repeat;
+  overflow: hidden;
+  background-color: #1d4ed8;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/brand/login-hero.png');
+    background-repeat: no-repeat;
+  }
+
+  &::before {
+    background-size: cover;
+    background-position: center;
+    filter: blur(60px) saturate(1.2);
+    transform: scale(1.15);
+  }
+
+  &::after {
+    background-size: contain;
+    background-position: center;
+  }
 
   @media (max-width: 900px) {
     display: none;
