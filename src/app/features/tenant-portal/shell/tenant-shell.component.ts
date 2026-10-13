@@ -24,10 +24,10 @@ interface TenantNavItem {
 })
 export class TenantShellComponent {
   readonly navItems: TenantNavItem[] = [
-    { label: 'Tableau de bord', icon: 'pi-home', route: '/locataire/tableau-de-bord' },
-    { label: 'Mes dossiers', icon: 'pi-file', route: '/locataire/dossiers' },
-    { label: 'Mes documents', icon: 'pi-folder', route: '/locataire/documents' },
-    { label: 'Mes paiements', icon: 'pi-wallet', route: '/locataire/paiements' },
-    { label: 'Mon profil', icon: 'pi-user', route: '/locataire/profil' },
+    { label: 'Tableau de bord', icon: 'pi-home', route: '/tenant-portal/dashboard' },
+    { label: 'Mes dossiers', icon: 'pi-file', route: '/tenant-portal/applications' },
+    { label: 'Mes documents', icon: 'pi-folder', route: '/tenant-portal/documents' },
+    { label: 'Mes paiements', icon: 'pi-wallet', route: '/tenant-portal/payments' },
+    { label: 'Mon profil', icon: 'pi-user', route: '/tenant-portal/profile' },
   ];
 }

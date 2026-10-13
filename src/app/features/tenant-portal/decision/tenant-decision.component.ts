@@ -39,6 +39,6 @@ export class TenantDecisionComponent {
   }
 
   goToDossier(): void {
-    this.router.navigate(['/locataire/dossiers', this.applicationId]);
+    this.router.navigate(['/tenant-portal/applications', this.applicationId]);
   }
 }

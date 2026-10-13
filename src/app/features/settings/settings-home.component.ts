@@ -12,19 +12,19 @@ import { TranslatePipe } from '../../core/i18n/translate.pipe';
 export class SettingsHomeComponent {
   readonly sections = [
     {
-      route: 'types-appartement',
+      route: 'apartment-types',
       icon: 'pi pi-home',
       titleKey: 'settings.apartmentTypes.title',
       descriptionKey: 'settings.apartmentTypes.subtitle',
     },
     {
-      route: 'types-propriete',
+      route: 'property-types',
       icon: 'pi pi-building',
       titleKey: 'settings.propertyTypes.title',
       descriptionKey: 'settings.propertyTypes.subtitle',
     },
     {
-      route: 'statuts-propriete',
+      route: 'property-statuses',
       icon: 'pi pi-tag',
       titleKey: 'settings.propertyStatuses.title',
       descriptionKey: 'settings.propertyStatuses.subtitle',

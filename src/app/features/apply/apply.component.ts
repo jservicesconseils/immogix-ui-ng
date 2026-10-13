@@ -234,7 +234,7 @@ export class ApplyComponent {
   goToStatus(): void {
     const app = this.result();
     if (app) {
-      this.router.navigate(['/locataire/dossiers', app.id]);
+      this.router.navigate(['/tenant-portal/applications', app.id]);
     }
   }
 }

@@ -16,27 +16,27 @@ export const routes: Routes = [
     // Espace locataire : public lui aussi, accessible par numero de suivi
     // seul (voir ApplicationPublicStatusController cote backend) --
     // aucun compte/mot de passe, comme le suivi d'une commande.
-    path: 'locataire',
+    path: 'tenant-portal',
     loadComponent: () => import('./features/tenant-portal/shell/tenant-shell.component').then((m) => m.TenantShellComponent),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'dossiers' },
+      { path: '', pathMatch: 'full', redirectTo: 'applications' },
       {
-        path: 'dossiers',
+        path: 'applications',
         loadComponent: () =>
           import('./features/tenant-portal/placeholder/tenant-placeholder.component').then((m) => m.TenantPlaceholderComponent),
         data: { title: 'Mes dossiers' },
       },
       {
-        path: 'dossiers/:applicationId',
+        path: 'applications/:applicationId',
         loadComponent: () => import('./features/tenant-portal/dossier/tenant-dossier.component').then((m) => m.TenantDossierComponent),
       },
       {
-        path: 'dossiers/:applicationId/decision',
+        path: 'applications/:applicationId/decision',
         loadComponent: () =>
           import('./features/tenant-portal/decision/tenant-decision.component').then((m) => m.TenantDecisionComponent),
       },
       {
-        path: 'tableau-de-bord',
+        path: 'dashboard',
         loadComponent: () =>
           import('./features/tenant-portal/placeholder/tenant-placeholder.component').then((m) => m.TenantPlaceholderComponent),
         data: { title: 'Tableau de bord' },
@@ -48,13 +48,13 @@ export const routes: Routes = [
         data: { title: 'Mes documents' },
       },
       {
-        path: 'paiements',
+        path: 'payments',
         loadComponent: () =>
           import('./features/tenant-portal/placeholder/tenant-placeholder.component').then((m) => m.TenantPlaceholderComponent),
         data: { title: 'Mes paiements' },
       },
       {
-        path: 'profil',
+        path: 'profile',
         loadComponent: () =>
           import('./features/tenant-portal/placeholder/tenant-placeholder.component').then((m) => m.TenantPlaceholderComponent),
         data: { title: 'Mon profil' },
@@ -125,46 +125,46 @@ export const routes: Routes = [
       // Elements du menu gestionnaire issus de la maquette (ecran 09) mais
       // sans fonctionnalite dediee dans ce MVP -- voir ManagerPlaceholderComponent.
       {
-        path: 'appartements',
+        path: 'apartments',
         loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
         data: { title: 'Appartements' },
       },
       {
-        path: 'dossiers-location',
+        path: 'applications',
         loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
         data: { title: 'Dossiers de location' },
       },
       {
-        path: 'baux',
+        path: 'leases',
         loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
         data: { title: 'Baux' },
       },
       {
-        path: 'paiements',
+        path: 'payments',
         loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
         data: { title: 'Paiements' },
       },
       {
-        path: 'rapports',
+        path: 'reports',
         loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
         data: { title: 'Rapports' },
       },
       {
-        path: 'parametres',
+        path: 'settings',
         loadComponent: () => import('./features/settings/settings-home.component').then((m) => m.SettingsHomeComponent),
       },
       {
-        path: 'parametres/types-appartement',
+        path: 'settings/apartment-types',
         loadComponent: () =>
           import('./features/settings/apartment-types/apartment-type-list.component').then((m) => m.ApartmentTypeListComponent),
       },
       {
-        path: 'parametres/types-propriete',
+        path: 'settings/property-types',
         loadComponent: () =>
           import('./features/settings/property-types/property-type-list.component').then((m) => m.PropertyTypeListComponent),
       },
       {
-        path: 'parametres/statuts-propriete',
+        path: 'settings/property-statuses',
         loadComponent: () =>
           import('./features/settings/property-statuses/property-status-list.component').then((m) => m.PropertyStatusListComponent),
       },
