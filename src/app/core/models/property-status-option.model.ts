@@ -1,23 +1,29 @@
-// Nomme "Option" pour ne pas entrer en collision avec le type PropertyStatus
-// (union de string) deja utilise dans property.model.ts pour le champ
-// Property.status -- ce fichier-ci alimente uniquement les ecrans de
-// Parametres (liste configurable par organisation), independants de cet
-// enum fixe.
+import { StatusSeverity } from './option-ref.model';
+
+// Nomme "Option" pour ne pas entrer en collision avec OptionRef/PropertyStatusRef
+// (deja utilise par Property.propertyStatus) -- ce fichier-ci modelise les
+// reponses du CRUD de Parametres (avec organizationId/createdAt).
 export interface PropertyStatusOptionResponse {
   id: string;
   organizationId: string;
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
+  severity: StatusSeverity;
   createdAt: string;
 }
 
 export interface CreatePropertyStatusOptionRequest {
   organizationId: string;
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
+  severity: StatusSeverity;
 }
 
 export interface UpdatePropertyStatusOptionRequest {
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
+  severity: StatusSeverity;
 }

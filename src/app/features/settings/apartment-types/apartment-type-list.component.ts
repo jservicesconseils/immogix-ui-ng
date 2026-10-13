@@ -8,11 +8,13 @@ import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api'
 import { AuthService } from '../../../core/auth/auth.service';
 import { ApartmentTypeResponse } from '../../../core/models/apartment-type.model';
 import { ApartmentTypeService } from '../../../core/services/apartment-type.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 @Component({
   selector: 'app-apartment-type-list',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, PrimeTemplate],
+  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, PrimeTemplate, TranslatePipe],
   templateUrl: './apartment-type-list.component.html',
   styleUrl: './apartment-type-list.component.scss',
 })
@@ -22,6 +24,7 @@ export class ApartmentTypeListComponent {
   private readonly apartmentTypeService = inject(ApartmentTypeService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  readonly i18n = inject(I18nService);
 
   readonly session = this.auth.session;
   readonly apartmentTypes = signal<ApartmentTypeResponse[]>([]);
@@ -31,7 +34,8 @@ export class ApartmentTypeListComponent {
   readonly editingId = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.maxLength(100)]],
+    nameEn: ['', [Validators.required, Validators.maxLength(100)]],
+    nameFr: ['', [Validators.required, Validators.maxLength(100)]],
     description: this.fb.control<string | null>(null, Validators.maxLength(300)),
   });
 
@@ -54,7 +58,7 @@ export class ApartmentTypeListComponent {
       },
       error: () => {
         this.loading.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "Impossible de charger les types d'appartement." });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.apartmentTypes.title') });
       },
     });
   }
@@ -67,7 +71,7 @@ export class ApartmentTypeListComponent {
 
   openEditDialog(apartmentType: ApartmentTypeResponse): void {
     this.editingId.set(apartmentType.id);
-    this.form.setValue({ name: apartmentType.name, description: apartmentType.description });
+    this.form.setValue({ nameEn: apartmentType.nameEn, nameFr: apartmentType.nameFr, description: apartmentType.description });
     this.dialogVisible.set(true);
   }
 
@@ -82,16 +86,16 @@ export class ApartmentTypeListComponent {
     this.submitting.set(true);
 
     if (editingId) {
-      this.apartmentTypeService.update(editingId, { name: value.name, description: value.description }).subscribe({
+      this.apartmentTypeService.update(editingId, { nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
         next: () => {
           this.submitting.set(false);
           this.dialogVisible.set(false);
-          this.messageService.add({ severity: 'success', summary: 'Type modifié', detail: "Le type d'appartement a été modifié." });
+          this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.save'), detail: this.i18n.translate('settings.apartmentTypes.updatedToast') });
           this.load();
         },
         error: () => {
           this.submitting.set(false);
-          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué.' });
+          this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.apartmentTypes.updatedToast') });
         },
       });
       return;
@@ -103,28 +107,28 @@ export class ApartmentTypeListComponent {
       return;
     }
 
-    this.apartmentTypeService.create({ organizationId, name: value.name, description: value.description }).subscribe({
+    this.apartmentTypeService.create({ organizationId, nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
       next: () => {
         this.submitting.set(false);
         this.dialogVisible.set(false);
-        this.messageService.add({ severity: 'success', summary: 'Type créé', detail: "Le type d'appartement a été ajouté." });
+        this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.create'), detail: this.i18n.translate('settings.apartmentTypes.createdToast') });
         this.load();
       },
       error: () => {
         this.submitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: "La création du type d'appartement a échoué." });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.apartmentTypes.createdToast') });
       },
     });
   }
 
   confirmDelete(apartmentType: ApartmentTypeResponse): void {
     this.confirmationService.confirm({
-      header: "Supprimer le type d'appartement",
-      message: `Voulez-vous vraiment supprimer « ${apartmentType.name} » ? Cette action est irréversible.`,
+      header: this.i18n.translate('settings.apartmentTypes.deleteTitle'),
+      message: this.i18n.translate('settings.deleteConfirm.message', { name: this.i18n.optionName(apartmentType) }),
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Supprimer',
+      acceptLabel: this.i18n.translate('common.delete'),
       acceptButtonStyleClass: 'p-button-danger',
-      rejectLabel: 'Annuler',
+      rejectLabel: this.i18n.translate('common.cancel'),
       rejectButtonStyleClass: 'p-button-text',
       accept: () => this.delete(apartmentType),
     });
@@ -133,11 +137,11 @@ export class ApartmentTypeListComponent {
   private delete(apartmentType: ApartmentTypeResponse): void {
     this.apartmentTypeService.delete(apartmentType.id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Type supprimé', detail: "Le type d'appartement a été supprimé." });
+        this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.delete'), detail: this.i18n.translate('settings.apartmentTypes.deletedToast') });
         this.load();
       },
       error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La suppression a échoué.' });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.apartmentTypes.deletedToast') });
       },
     });
   }

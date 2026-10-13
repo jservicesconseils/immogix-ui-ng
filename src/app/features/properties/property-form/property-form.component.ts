@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,16 +13,16 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { CANADIAN_PROVINCES } from '../../../core/constants/provinces';
 import { DocumentResponse } from '../../../core/models/document.model';
 import { OwnerResponse, PropertyOwnerResponse } from '../../../core/models/owner.model';
-import {
-  BUILDING_STATUS_LABELS,
-  BuildingStatus,
-  PropertyResponse,
-  PROPERTY_TYPE_LABELS,
-  PropertyType,
-} from '../../../core/models/property.model';
+import { BUILDING_STATUS_LABELS, BuildingStatus, PropertyResponse } from '../../../core/models/property.model';
+import { PropertyTypeOptionResponse } from '../../../core/models/property-type-option.model';
+import { PropertyStatusOptionResponse } from '../../../core/models/property-status-option.model';
 import { DocumentService } from '../../../core/services/document.service';
 import { OwnerService } from '../../../core/services/owner.service';
 import { PropertyService } from '../../../core/services/property.service';
+import { PropertyTypeOptionService } from '../../../core/services/property-type-option.service';
+import { PropertyStatusOptionService } from '../../../core/services/property-status-option.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 const STEP_TITLES = ['Informations générales', 'Caractéristiques', 'Propriétaire', 'Finances', 'Photos et documents'];
 
@@ -31,6 +30,10 @@ const STEP_TITLES = ['Informations générales', 'Caractéristiques', 'Propriét
  * Creation ET edition d'une propriete, dans le meme stepper 5 etapes que
  * la maquette (ecrans "Nouvelle propriete" / "Modifier la propriete" --
  * meme hierarchie de champs, seule la source des valeurs initiales change).
+ *
+ * Type et statut de propriete sont charges depuis Parametres
+ * (PropertyTypeOptionService/PropertyStatusOptionService) plutot que
+ * codes en dur -- voir settings/property-types et settings/property-statuses.
  */
 @Component({
   selector: 'app-property-form',
@@ -38,13 +41,13 @@ const STEP_TITLES = ['Informations générales', 'Caractéristiques', 'Propriét
   imports: [
     ReactiveFormsModule,
     ButtonModule,
-    CheckboxModule,
     DialogModule,
     InputNumberModule,
     InputTextModule,
     SelectModule,
     TextareaModule,
     PrimeTemplate,
+    TranslatePipe,
   ],
   templateUrl: './property-form.component.html',
   styleUrl: './property-form.component.scss',
@@ -57,7 +60,10 @@ export class PropertyFormComponent {
   private readonly propertyService = inject(PropertyService);
   private readonly ownerService = inject(OwnerService);
   private readonly documentService = inject(DocumentService);
+  private readonly propertyTypeOptionService = inject(PropertyTypeOptionService);
+  private readonly propertyStatusOptionService = inject(PropertyStatusOptionService);
   private readonly messageService = inject(MessageService);
+  readonly i18n = inject(I18nService);
 
   readonly propertyId = this.route.snapshot.paramMap.get('propertyId');
   readonly mode = computed<'create' | 'edit'>(() => (this.propertyId ? 'edit' : 'create'));
@@ -66,7 +72,14 @@ export class PropertyFormComponent {
   readonly loading = signal(!!this.propertyId);
   readonly submitting = signal(false);
 
-  readonly propertyTypeOptions = Object.entries(PROPERTY_TYPE_LABELS).map(([value, label]) => ({ label, value }));
+  private readonly propertyTypesRaw = signal<PropertyTypeOptionResponse[]>([]);
+  private readonly propertyStatusesRaw = signal<PropertyStatusOptionResponse[]>([]);
+  readonly propertyTypeOptions = computed(() =>
+    this.propertyTypesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
+  readonly propertyStatusOptions = computed(() =>
+    this.propertyStatusesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
   readonly buildingStatusOptions = Object.entries(BUILDING_STATUS_LABELS).map(([value, label]) => ({ label, value }));
   readonly provinceOptions = CANADIAN_PROVINCES;
 
@@ -75,14 +88,14 @@ export class PropertyFormComponent {
   readonly documents = signal<DocumentResponse[]>([]);
 
   readonly form = this.fb.nonNullable.group({
-    type: this.fb.nonNullable.control<PropertyType | null>(null, Validators.required),
+    propertyTypeId: this.fb.nonNullable.control<string | null>(null, Validators.required),
+    propertyStatusId: this.fb.nonNullable.control<string | null>(null, Validators.required),
     name: this.fb.nonNullable.control<string | null>(null, Validators.maxLength(200)),
     street: ['', [Validators.required, Validators.maxLength(200)]],
     city: ['', [Validators.required, Validators.maxLength(100)]],
     province: this.fb.nonNullable.control<string | null>(null, Validators.required),
     postalCode: ['', [Validators.required, Validators.maxLength(10)]],
     description: this.fb.nonNullable.control<string | null>(null, Validators.maxLength(2000)),
-    active: [true],
 
     buildingStatus: this.fb.nonNullable.control<BuildingStatus | null>(null),
     yearBuilt: this.fb.nonNullable.control<number | null>(null),
@@ -98,13 +111,15 @@ export class PropertyFormComponent {
   });
 
   private readonly stepFields: Record<number, (keyof typeof this.form.controls)[]> = {
-    1: ['type', 'street', 'city', 'province', 'postalCode'],
+    1: ['propertyTypeId', 'propertyStatusId', 'street', 'city', 'province', 'postalCode'],
   };
 
   constructor() {
     const organizationId = this.auth.session()?.organizationId;
     if (organizationId) {
       this.ownerService.listByOrganization(organizationId).subscribe((owners) => this.availableOwners.set(owners));
+      this.propertyTypeOptionService.listByOrganization(organizationId).subscribe((options) => this.propertyTypesRaw.set(options));
+      this.propertyStatusOptionService.listByOrganization(organizationId).subscribe((options) => this.propertyStatusesRaw.set(options));
     }
 
     if (this.propertyId) {
@@ -127,14 +142,14 @@ export class PropertyFormComponent {
 
   private applyProperty(property: PropertyResponse): void {
     this.form.patchValue({
-      type: property.type,
+      propertyTypeId: property.propertyType.id,
+      propertyStatusId: property.propertyStatus.id,
       name: property.name,
       street: property.street,
       city: property.city,
       province: property.province,
       postalCode: property.postalCode,
       description: property.description,
-      active: property.status !== 'ARCHIVEE',
       buildingStatus: property.buildingStatus,
       yearBuilt: property.yearBuilt,
       floorCount: property.floorCount,
@@ -190,8 +205,8 @@ export class PropertyFormComponent {
     for (const field of this.stepFields[1]) {
       this.form.controls[field].markAsTouched();
     }
-    if (this.form.controls.type.invalid || this.form.controls.street.invalid || this.form.controls.city.invalid ||
-        this.form.controls.province.invalid || this.form.controls.postalCode.invalid) {
+    if (this.form.controls.propertyTypeId.invalid || this.form.controls.propertyStatusId.invalid || this.form.controls.street.invalid ||
+        this.form.controls.city.invalid || this.form.controls.province.invalid || this.form.controls.postalCode.invalid) {
       this.currentStep.set(1);
       return;
     }
@@ -201,7 +216,8 @@ export class PropertyFormComponent {
     this.submitting.set(true);
 
     const payload = {
-      type: value.type!,
+      propertyTypeId: value.propertyTypeId!,
+      propertyStatusId: value.propertyStatusId!,
       name: value.name,
       street: value.street,
       city: value.city,

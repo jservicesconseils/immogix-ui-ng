@@ -11,16 +11,14 @@ import { MessageService, PrimeTemplate } from 'primeng/api';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../../core/auth/auth.service';
-import {
-  PROPERTY_STATUS_LABELS,
-  PROPERTY_STATUS_SEVERITY,
-  PROPERTY_TYPE_LABELS,
-  PropertyResponse,
-  PropertyStatus,
-  PropertyType,
-  UnitResponse,
-} from '../../../core/models/property.model';
+import { PropertyResponse, UnitResponse } from '../../../core/models/property.model';
+import { PropertyTypeOptionResponse } from '../../../core/models/property-type-option.model';
+import { PropertyStatusOptionResponse } from '../../../core/models/property-status-option.model';
 import { PropertyService } from '../../../core/services/property.service';
+import { PropertyTypeOptionService } from '../../../core/services/property-type-option.service';
+import { PropertyStatusOptionService } from '../../../core/services/property-status-option.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 interface PropertyRow {
   property: PropertyResponse;
@@ -32,30 +30,36 @@ interface PropertyRow {
 @Component({
   selector: 'app-property-list',
   standalone: true,
-  imports: [FormsModule, ButtonModule, InputTextModule, SelectModule, TableModule, TagModule, CurrencyPipe, PrimeTemplate],
+  imports: [FormsModule, ButtonModule, InputTextModule, SelectModule, TableModule, TagModule, CurrencyPipe, PrimeTemplate, TranslatePipe],
   templateUrl: './property-list.component.html',
   styleUrl: './property-list.component.scss',
 })
 export class PropertyListComponent {
   private readonly auth = inject(AuthService);
   private readonly propertyService = inject(PropertyService);
+  private readonly propertyTypeOptionService = inject(PropertyTypeOptionService);
+  private readonly propertyStatusOptionService = inject(PropertyStatusOptionService);
   private readonly messageService = inject(MessageService);
   private readonly router = inject(Router);
+  readonly i18n = inject(I18nService);
 
   readonly session = this.auth.session;
   readonly rows = signal<PropertyRow[]>([]);
   readonly loading = signal(true);
 
   readonly searchTerm = signal('');
-  readonly typeFilter = signal<PropertyType | null>(null);
-  readonly statusFilter = signal<PropertyStatus | null>(null);
+  readonly typeFilter = signal<string | null>(null);
+  readonly statusFilter = signal<string | null>(null);
   readonly cityFilter = signal<string | null>(null);
 
-  readonly statusLabels = PROPERTY_STATUS_LABELS;
-  readonly statusSeverity = PROPERTY_STATUS_SEVERITY;
-  readonly typeLabels = PROPERTY_TYPE_LABELS;
-  readonly typeOptions = Object.entries(PROPERTY_TYPE_LABELS).map(([value, label]) => ({ label, value }));
-  readonly statusOptions = Object.entries(PROPERTY_STATUS_LABELS).map(([value, label]) => ({ label, value }));
+  private readonly propertyTypesRaw = signal<PropertyTypeOptionResponse[]>([]);
+  private readonly propertyStatusesRaw = signal<PropertyStatusOptionResponse[]>([]);
+  readonly typeOptions = computed(() =>
+    this.propertyTypesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
+  readonly statusOptions = computed(() =>
+    this.propertyStatusesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
 
   readonly cityOptions = computed(() => {
     const cities = new Set(this.rows().map((row) => row.property.city));
@@ -69,8 +73,8 @@ export class PropertyListComponent {
     const city = this.cityFilter();
     return this.rows().filter((row) => {
       const matchesTerm = !term || row.property.street.toLowerCase().includes(term) || (row.property.name ?? '').toLowerCase().includes(term);
-      const matchesType = !type || row.property.type === type;
-      const matchesStatus = !status || row.property.status === status;
+      const matchesType = !type || row.property.propertyType.id === type;
+      const matchesStatus = !status || row.property.propertyStatus.id === status;
       const matchesCity = !city || row.property.city === city;
       return matchesTerm && matchesType && matchesStatus && matchesCity;
     });
@@ -78,6 +82,12 @@ export class PropertyListComponent {
 
   constructor() {
     this.load();
+
+    const organizationId = this.session()?.organizationId;
+    if (organizationId) {
+      this.propertyTypeOptionService.listByOrganization(organizationId).subscribe((options) => this.propertyTypesRaw.set(options));
+      this.propertyStatusOptionService.listByOrganization(organizationId).subscribe((options) => this.propertyStatusesRaw.set(options));
+    }
   }
 
   load(): void {

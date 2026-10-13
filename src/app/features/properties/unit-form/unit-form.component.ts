@@ -8,18 +8,26 @@ import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
 
-import { PropertyResponse, UNIT_STATUS_LABELS, UNIT_TYPE_LABELS, UnitStatus, UnitType } from '../../../core/models/property.model';
+import { AuthService } from '../../../core/auth/auth.service';
+import { PropertyResponse, UNIT_STATUS_LABELS, UnitStatus } from '../../../core/models/property.model';
+import { ApartmentTypeResponse } from '../../../core/models/apartment-type.model';
 import { PropertyService } from '../../../core/services/property.service';
+import { ApartmentTypeService } from '../../../core/services/apartment-type.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 /**
  * Ajout ET edition d'un appartement (ecran "Ajout d'un appartement" de la
  * maquette), meme formulaire pour les deux cas -- seule la source des
  * valeurs initiales et l'appel de service different.
+ *
+ * Le type d'appartement est charge depuis Parametres (ApartmentTypeService)
+ * plutot que code en dur -- voir settings/apartment-types.
  */
 @Component({
   selector: 'app-unit-form',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonModule, InputNumberModule, InputTextModule, SelectModule, TextareaModule],
+  imports: [ReactiveFormsModule, ButtonModule, InputNumberModule, InputTextModule, SelectModule, TextareaModule, TranslatePipe],
   templateUrl: './unit-form.component.html',
   styleUrl: './unit-form.component.scss',
 })
@@ -27,8 +35,11 @@ export class UnitFormComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
   private readonly propertyService = inject(PropertyService);
+  private readonly apartmentTypeService = inject(ApartmentTypeService);
   private readonly messageService = inject(MessageService);
+  readonly i18n = inject(I18nService);
 
   readonly propertyId = this.route.snapshot.paramMap.get('propertyId')!;
   readonly unitId = this.route.snapshot.paramMap.get('unitId');
@@ -38,13 +49,16 @@ export class UnitFormComponent {
   readonly loading = signal(!!this.unitId);
   readonly submitting = signal(false);
 
-  readonly unitTypeOptions = Object.entries(UNIT_TYPE_LABELS).map(([value, label]) => ({ label, value }));
+  private readonly apartmentTypesRaw = signal<ApartmentTypeResponse[]>([]);
+  readonly apartmentTypeOptions = computed(() =>
+    this.apartmentTypesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
   readonly statusOptions = Object.entries(UNIT_STATUS_LABELS).map(([value, label]) => ({ label, value }));
 
   readonly form = this.fb.nonNullable.group({
     label: ['', [Validators.required, Validators.maxLength(50)]],
     floor: this.fb.control<number | null>(null),
-    type: this.fb.control<UnitType | null>(null),
+    apartmentTypeId: this.fb.control<string | null>(null),
     bedrooms: this.fb.control<number | null>(null),
     bathrooms: this.fb.control<number | null>(null),
     areaSquareMeters: this.fb.control<number | null>(null),
@@ -57,13 +71,18 @@ export class UnitFormComponent {
   constructor() {
     this.propertyService.getById(this.propertyId).subscribe((property) => this.property.set(property));
 
+    const organizationId = this.auth.session()?.organizationId;
+    if (organizationId) {
+      this.apartmentTypeService.listByOrganization(organizationId).subscribe((options) => this.apartmentTypesRaw.set(options));
+    }
+
     if (this.unitId) {
       this.propertyService.getUnit(this.propertyId, this.unitId).subscribe({
         next: (unit) => {
           this.form.patchValue({
             label: unit.label,
             floor: unit.floor,
-            type: unit.type,
+            apartmentTypeId: unit.apartmentType?.id ?? null,
             bedrooms: unit.bedrooms,
             bathrooms: unit.bathrooms,
             areaSquareMeters: unit.areaSquareMeters,
@@ -111,7 +130,7 @@ export class UnitFormComponent {
           areaSquareMeters: value.areaSquareMeters,
           bedrooms: value.bedrooms,
           bathrooms: value.bathrooms,
-          type: value.type,
+          apartmentTypeId: value.apartmentTypeId,
           description: value.description,
           listedRent: value.listedRent,
           listedSecurityDeposit: value.listedSecurityDeposit,
@@ -138,7 +157,7 @@ export class UnitFormComponent {
         areaSquareMeters: value.areaSquareMeters,
         bedrooms: value.bedrooms,
         bathrooms: value.bathrooms,
-        type: value.type,
+        apartmentTypeId: value.apartmentTypeId,
         description: value.description,
         listedRent: value.listedRent,
         listedSecurityDeposit: value.listedSecurityDeposit,

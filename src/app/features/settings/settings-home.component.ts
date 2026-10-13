@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 @Component({
   selector: 'app-settings-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TranslatePipe],
   templateUrl: './settings-home.component.html',
   styleUrl: './settings-home.component.scss',
 })
@@ -13,20 +14,20 @@ export class SettingsHomeComponent {
     {
       route: 'types-appartement',
       icon: 'pi pi-home',
-      title: "Types d'appartement",
-      description: "Vocabulaire utilisé pour décrire vos unités (ex. studio, 3½, 4½).",
+      titleKey: 'settings.apartmentTypes.title',
+      descriptionKey: 'settings.apartmentTypes.subtitle',
     },
     {
       route: 'types-propriete',
       icon: 'pi pi-building',
-      title: 'Types de propriété',
-      description: 'Catégories utilisées pour classer vos propriétés (ex. résidentiel, commercial).',
+      titleKey: 'settings.propertyTypes.title',
+      descriptionKey: 'settings.propertyTypes.subtitle',
     },
     {
       route: 'statuts-propriete',
       icon: 'pi pi-tag',
-      title: 'Statuts de propriété',
-      description: 'États possibles pour une propriété (ex. actif, en rénovation, vendu).',
+      titleKey: 'settings.propertyStatuses.title',
+      descriptionKey: 'settings.propertyStatuses.subtitle',
     },
   ];
 }

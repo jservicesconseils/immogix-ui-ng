@@ -1,13 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { AuthService } from '../../core/auth/auth.service';
+import { I18nService } from '../../core/i18n/i18n.service';
+import { Locale } from '../../core/i18n/locale';
+import { TranslatePipe } from '../../core/i18n/translate.pipe';
 
 interface NavItem {
-  label: string;
+  translationKey: string;
   icon: string;
   route: string;
 }
@@ -21,16 +24,18 @@ interface NavItem {
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AvatarModule, ButtonModule, MenuModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AvatarModule, ButtonModule, MenuModule, TranslatePipe],
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.scss',
 })
 export class ShellComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  readonly i18n = inject(I18nService);
 
   readonly session = this.auth.session;
   readonly mobileNavOpen = signal(false);
+  readonly locale = this.i18n.locale;
 
   // Liste et ordre alignes sur la maquette de reference (ecran 09). Les
   // routes sans page dediee dans ce MVP pointent vers une page "bientot
@@ -39,22 +44,29 @@ export class ShellComponent {
   // fonctionnalites reelles absentes de la maquette -- ajoutees en fin
   // de liste plutot que supprimees.
   readonly navItems: NavItem[] = [
-    { label: 'Tableau de bord', icon: 'pi pi-home', route: '/dashboard' },
-    { label: 'Immeubles', icon: 'pi pi-building', route: '/properties' },
-    { label: 'Appartements', icon: 'pi pi-th-large', route: '/appartements' },
-    { label: 'Dossiers de location', icon: 'pi pi-file', route: '/dossiers-location' },
-    { label: 'Locataires', icon: 'pi pi-users', route: '/tenants' },
-    { label: 'Baux', icon: 'pi pi-file-edit', route: '/baux' },
-    { label: 'Paiements', icon: 'pi pi-wallet', route: '/paiements' },
-    { label: 'Rapports', icon: 'pi pi-chart-bar', route: '/rapports' },
-    { label: 'Paramètres', icon: 'pi pi-cog', route: '/parametres' },
-    { label: 'Propriétaires', icon: 'pi pi-id-card', route: '/owners' },
-    { label: 'Règles juridictionnelles', icon: 'pi pi-shield', route: '/admin/jurisdiction-rules' },
+    { translationKey: 'shell.nav.dashboard', icon: 'pi pi-home', route: '/dashboard' },
+    { translationKey: 'shell.nav.properties', icon: 'pi pi-building', route: '/properties' },
+    { translationKey: 'shell.nav.apartments', icon: 'pi pi-th-large', route: '/appartements' },
+    { translationKey: 'shell.nav.applications', icon: 'pi pi-file', route: '/dossiers-location' },
+    { translationKey: 'shell.nav.tenants', icon: 'pi pi-users', route: '/tenants' },
+    { translationKey: 'shell.nav.leases', icon: 'pi pi-file-edit', route: '/baux' },
+    { translationKey: 'shell.nav.payments', icon: 'pi pi-wallet', route: '/paiements' },
+    { translationKey: 'shell.nav.reports', icon: 'pi pi-chart-bar', route: '/rapports' },
+    { translationKey: 'shell.nav.settings', icon: 'pi pi-cog', route: '/parametres' },
+    { translationKey: 'shell.nav.owners', icon: 'pi pi-id-card', route: '/owners' },
+    { translationKey: 'shell.nav.jurisdictionRules', icon: 'pi pi-shield', route: '/admin/jurisdiction-rules' },
   ];
 
-  readonly userMenuItems: MenuItem[] = [
-    { label: 'Déconnexion', icon: 'pi pi-sign-out', command: () => this.logout() },
-  ];
+  // computed (pas un tableau fige) : p-menu lit [model] une fois au
+  // moment du rendu, un tableau statique ne se regenererait jamais quand
+  // la langue change.
+  readonly userMenuItems = computed<MenuItem[]>(() => [
+    { label: this.i18n.translate('shell.userMenu.logout'), icon: 'pi pi-sign-out', command: () => this.logout() },
+  ]);
+
+  setLocale(locale: Locale): void {
+    this.i18n.setLocale(locale);
+  }
 
   initials(): string {
     const name = this.session()?.displayName ?? '';

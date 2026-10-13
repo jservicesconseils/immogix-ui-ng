@@ -24,8 +24,8 @@
           <p-inputnumber inputId="floor" formControlName="floor" styleClass="w-full" />
         </div>
         <div class="field">
-          <label for="type">Type d'appartement</label>
-          <p-select inputId="type" formControlName="type" [options]="unitTypeOptions" optionLabel="label" optionValue="value" placeholder="Sélectionner" styleClass="w-full" [showClear]="true" />
+          <label for="apartmentTypeId">{{ 'units.form.type' | translate }}</label>
+          <p-select inputId="apartmentTypeId" formControlName="apartmentTypeId" [options]="apartmentTypeOptions()" optionLabel="label" optionValue="value" [placeholder]="'units.form.typePlaceholder' | translate" styleClass="w-full" [showClear]="true" />
         </div>
       </div>
 

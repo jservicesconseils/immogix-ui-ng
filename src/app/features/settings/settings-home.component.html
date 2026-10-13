@@ -1,7 +1,7 @@
 <div class="page-header">
   <div>
-    <h1>Paramètres</h1>
-    <p>Listes configurables utilisées dans la gestion de vos propriétés.</p>
+    <h1>{{ 'settings.title' | translate }}</h1>
+    <p>{{ 'settings.subtitle' | translate }}</p>
   </div>
 </div>
 
@@ -10,8 +10,8 @@
     <a class="settings-card" [routerLink]="section.route">
       <span class="icon-box icon-box-primary"><i [class]="section.icon"></i></span>
       <div>
-        <h3>{{ section.title }}</h3>
-        <p>{{ section.description }}</p>
+        <h3>{{ section.titleKey | translate }}</h3>
+        <p>{{ section.descriptionKey | translate }}</p>
       </div>
       <i class="pi pi-chevron-right settings-card-arrow"></i>
     </a>

@@ -20,19 +20,13 @@ import {
   ApplicationResponse,
 } from '../../../core/models/application.model';
 import { LEASE_STATUS_LABELS, LEASE_STATUS_SEVERITY, LeaseResponse } from '../../../core/models/lease.model';
-import {
-  PROPERTY_TYPE_LABELS,
-  PropertyResponse,
-  UNIT_STATUS_LABELS,
-  UNIT_STATUS_SEVERITY,
-  UNIT_TYPE_LABELS,
-  UnitResponse,
-} from '../../../core/models/property.model';
+import { PropertyResponse, UNIT_STATUS_LABELS, UNIT_STATUS_SEVERITY, UnitResponse } from '../../../core/models/property.model';
 import { TenantResponse } from '../../../core/models/tenant.model';
 import { ApplicationService } from '../../../core/services/application.service';
 import { LeaseService } from '../../../core/services/lease.service';
 import { PropertyService } from '../../../core/services/property.service';
 import { TenantService } from '../../../core/services/tenant.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
 
 @Component({
   selector: 'app-unit-detail',
@@ -66,6 +60,7 @@ export class UnitDetailComponent {
   private readonly leaseService = inject(LeaseService);
   private readonly applicationService = inject(ApplicationService);
   private readonly messageService = inject(MessageService);
+  readonly i18n = inject(I18nService);
 
   readonly propertyId = this.route.snapshot.paramMap.get('propertyId')!;
   readonly unitId = this.route.snapshot.paramMap.get('unitId')!;
@@ -78,10 +73,8 @@ export class UnitDetailComponent {
   readonly dialogVisible = signal(false);
   readonly submitting = signal(false);
 
-  readonly typeLabels = PROPERTY_TYPE_LABELS;
   readonly unitStatusLabels = UNIT_STATUS_LABELS;
   readonly unitStatusSeverity = UNIT_STATUS_SEVERITY;
-  readonly unitTypeLabels = UNIT_TYPE_LABELS;
   readonly leaseStatusLabels = LEASE_STATUS_LABELS;
   readonly leaseStatusSeverity = LEASE_STATUS_SEVERITY;
 

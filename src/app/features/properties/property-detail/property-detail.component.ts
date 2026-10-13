@@ -45,18 +45,16 @@ import {
 import { OwnerResponse, PropertyOwnerResponse } from '../../../core/models/owner.model';
 import {
   BUILDING_STATUS_LABELS,
-  PROPERTY_STATUS_LABELS,
-  PROPERTY_STATUS_SEVERITY,
-  PROPERTY_TYPE_LABELS,
   PropertyResponse,
   UNIT_STATUS_LABELS,
   UNIT_STATUS_SEVERITY,
-  UNIT_TYPE_LABELS,
   UnitResponse,
   UnitStatus,
-  UnitType,
 } from '../../../core/models/property.model';
+import { ApartmentTypeResponse } from '../../../core/models/apartment-type.model';
 import { TenantResponse } from '../../../core/models/tenant.model';
+import { ApartmentTypeService } from '../../../core/services/apartment-type.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
 
 interface HistoryEntry {
   date: string;
@@ -104,20 +102,21 @@ export class PropertyDetailComponent {
   private readonly documentService = inject(DocumentService);
   private readonly leaseService = inject(LeaseService);
   private readonly tenantService = inject(TenantService);
+  private readonly apartmentTypeService = inject(ApartmentTypeService);
   private readonly messageService = inject(MessageService);
+  readonly i18n = inject(I18nService);
 
   readonly propertyId = this.route.snapshot.paramMap.get('propertyId')!;
 
   readonly property = signal<PropertyResponse | null>(null);
   readonly loading = signal(true);
 
-  readonly typeLabels = PROPERTY_TYPE_LABELS;
-  readonly statusLabels = PROPERTY_STATUS_LABELS;
-  readonly statusSeverity = PROPERTY_STATUS_SEVERITY;
   readonly unitStatusLabels = UNIT_STATUS_LABELS;
   readonly unitStatusSeverity = UNIT_STATUS_SEVERITY;
-  readonly unitTypeLabels = UNIT_TYPE_LABELS;
-  readonly unitTypeOptions = Object.entries(UNIT_TYPE_LABELS).map(([value, label]) => ({ label, value }));
+  private readonly apartmentTypesRaw = signal<ApartmentTypeResponse[]>([]);
+  readonly unitTypeOptions = computed(() =>
+    this.apartmentTypesRaw().map((option) => ({ label: this.i18n.optionName(option), value: option.id })),
+  );
   readonly unitStatusOptions = Object.entries(UNIT_STATUS_LABELS).map(([value, label]) => ({ label, value }));
   readonly buildingStatusLabels = BUILDING_STATUS_LABELS;
   readonly maintenancePriorityLabels = MAINTENANCE_PRIORITY_LABELS;
@@ -151,7 +150,7 @@ export class PropertyDetailComponent {
   readonly unitSearchTerm = signal('');
   readonly unitFloorFilter = signal<number | null>(null);
   readonly unitStatusFilter = signal<UnitStatus | null>(null);
-  readonly unitTypeFilter = signal<UnitType | null>(null);
+  readonly unitTypeFilter = signal<string | null>(null);
 
   readonly floorOptions = computed(() => {
     const floors = new Set(this.units().map((u) => u.floor).filter((f): f is number => f != null));
@@ -171,7 +170,7 @@ export class PropertyDetailComponent {
       const matchesTerm = !term || unit.label.toLowerCase().includes(term);
       const matchesFloor = floor == null || unit.floor === floor;
       const matchesStatus = !status || unit.status === status;
-      const matchesType = !type || unit.type === type;
+      const matchesType = !type || unit.apartmentType?.id === type;
       return matchesTerm && matchesFloor && matchesStatus && matchesType;
     });
   });
@@ -336,6 +335,7 @@ export class PropertyDetailComponent {
     const organizationId = this.auth.session()?.organizationId;
     if (organizationId) {
       this.tenantService.listByOrganization(organizationId).subscribe((tenants) => this.tenants.set(tenants));
+      this.apartmentTypeService.listByOrganization(organizationId).subscribe((options) => this.apartmentTypesRaw.set(options));
     }
   }
 

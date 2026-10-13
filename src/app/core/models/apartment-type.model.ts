@@ -1,18 +1,21 @@
 export interface ApartmentTypeResponse {
   id: string;
   organizationId: string;
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
   createdAt: string;
 }
 
 export interface CreateApartmentTypeRequest {
   organizationId: string;
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
 }
 
 export interface UpdateApartmentTypeRequest {
-  name: string;
+  nameEn: string;
+  nameFr: string;
   description: string | null;
 }

@@ -11,6 +11,10 @@ import {
   UpdatePropertyRequest,
   UpdateUnitRequest,
 } from '../models/property.model';
+import { PropertyStatusRef } from '../models/option-ref.model';
+
+const SAMPLE_TYPE = { id: 'type-1', nameEn: 'Single-family home', nameFr: 'Maison individuelle' };
+const SAMPLE_STATUS: PropertyStatusRef = { id: 'status-1', nameEn: 'Vacant', nameFr: 'Vacante', severity: 'warn' };
 
 describe('PropertyService', () => {
   let service: PropertyService;
@@ -32,12 +36,13 @@ describe('PropertyService', () => {
   it('creerUnePropriete_envoieUnPostVersLeBonEndpoint', () => {
     const request: CreatePropertyRequest = {
       organizationId: 'org-1',
-      type: 'MAISON_INDIVIDUELLE',
+      propertyTypeId: SAMPLE_TYPE.id,
       name: null,
       street: '123 rue des Lilas',
       city: 'Montreal',
       province: 'QC',
       postalCode: 'H1A 1A1',
+      propertyStatusId: SAMPLE_STATUS.id,
       cadastreNumber: null,
       taxId: null,
       buildingStatus: null,
@@ -47,7 +52,26 @@ describe('PropertyService', () => {
       estimatedValue: null,
       description: null,
     };
-    const response: PropertyResponse = { id: 'p-1', ...request, status: 'VACANTE', createdAt: '2026-01-01T00:00:00Z' };
+    const response: PropertyResponse = {
+      id: 'p-1',
+      organizationId: request.organizationId,
+      propertyType: SAMPLE_TYPE,
+      name: request.name,
+      street: request.street,
+      city: request.city,
+      province: request.province,
+      postalCode: request.postalCode,
+      propertyStatus: SAMPLE_STATUS,
+      cadastreNumber: request.cadastreNumber,
+      taxId: request.taxId,
+      buildingStatus: request.buildingStatus,
+      yearBuilt: request.yearBuilt,
+      floorCount: request.floorCount,
+      totalSurfaceArea: request.totalSurfaceArea,
+      estimatedValue: request.estimatedValue,
+      description: request.description,
+      createdAt: '2026-01-01T00:00:00Z',
+    };
 
     service.create(request).subscribe((result) => expect(result).toEqual(response));
 
@@ -61,13 +85,13 @@ describe('PropertyService', () => {
     const response: PropertyResponse = {
       id: 'p-1',
       organizationId: 'org-1',
-      type: 'CONDO',
+      propertyType: SAMPLE_TYPE,
       name: null,
       street: '1 rue Principale',
       city: 'Quebec',
       province: 'QC',
       postalCode: 'G1A 1A1',
-      status: 'OCCUPEE',
+      propertyStatus: SAMPLE_STATUS,
       cadastreNumber: null,
       taxId: null,
       buildingStatus: null,
@@ -88,12 +112,13 @@ describe('PropertyService', () => {
 
   it('modifierUnePropriete_envoieUnPutVersLeBonEndpoint', () => {
     const request: UpdatePropertyRequest = {
-      type: 'MAISON_INDIVIDUELLE',
+      propertyTypeId: SAMPLE_TYPE.id,
       name: null,
       street: '123 rue des Lilas',
       city: 'Montreal',
       province: 'QC',
       postalCode: 'H1A 1A1',
+      propertyStatusId: SAMPLE_STATUS.id,
       cadastreNumber: null,
       taxId: null,
       buildingStatus: null,
@@ -103,7 +128,26 @@ describe('PropertyService', () => {
       estimatedValue: null,
       description: null,
     };
-    const response: PropertyResponse = { id: 'p-1', organizationId: 'org-1', ...request, status: 'VACANTE', createdAt: '2026-01-01T00:00:00Z' };
+    const response: PropertyResponse = {
+      id: 'p-1',
+      organizationId: 'org-1',
+      propertyType: SAMPLE_TYPE,
+      name: request.name,
+      street: request.street,
+      city: request.city,
+      province: request.province,
+      postalCode: request.postalCode,
+      propertyStatus: SAMPLE_STATUS,
+      cadastreNumber: request.cadastreNumber,
+      taxId: request.taxId,
+      buildingStatus: request.buildingStatus,
+      yearBuilt: request.yearBuilt,
+      floorCount: request.floorCount,
+      totalSurfaceArea: request.totalSurfaceArea,
+      estimatedValue: request.estimatedValue,
+      description: request.description,
+      createdAt: '2026-01-01T00:00:00Z',
+    };
 
     service.update('p-1', request).subscribe((result) => expect(result).toEqual(response));
 
@@ -121,13 +165,28 @@ describe('PropertyService', () => {
       areaSquareMeters: null,
       bedrooms: 3,
       bathrooms: 1,
-      type: null,
+      apartmentTypeId: null,
       description: null,
       listedRent: null,
       listedSecurityDeposit: null,
       status: null,
     };
-    const response: UnitResponse = { id: 'u-1', propertyId: 'p-1', ...request, status: 'DISPONIBLE', createdAt: '2026-01-01T00:00:00Z' };
+    const response: UnitResponse = {
+      id: 'u-1',
+      propertyId: 'p-1',
+      label: request.label,
+      principal: request.principal,
+      floor: request.floor,
+      areaSquareMeters: request.areaSquareMeters,
+      bedrooms: request.bedrooms,
+      bathrooms: request.bathrooms,
+      apartmentType: null,
+      description: request.description,
+      listedRent: request.listedRent,
+      listedSecurityDeposit: request.listedSecurityDeposit,
+      status: 'DISPONIBLE',
+      createdAt: '2026-01-01T00:00:00Z',
+    };
 
     service.createUnit('p-1', request).subscribe((result) => expect(result).toEqual(response));
 
@@ -143,7 +202,7 @@ describe('PropertyService', () => {
       areaSquareMeters: 55.5,
       bedrooms: 2,
       bathrooms: 1,
-      type: null,
+      apartmentTypeId: null,
       description: null,
       listedRent: null,
       listedSecurityDeposit: null,
@@ -151,7 +210,15 @@ describe('PropertyService', () => {
     const response: UnitResponse = {
       id: 'u-1',
       propertyId: 'p-1',
-      ...request,
+      label: request.label,
+      floor: request.floor,
+      areaSquareMeters: request.areaSquareMeters,
+      bedrooms: request.bedrooms,
+      bathrooms: request.bathrooms,
+      apartmentType: null,
+      description: request.description,
+      listedRent: request.listedRent,
+      listedSecurityDeposit: request.listedSecurityDeposit,
       principal: false,
       status: 'DISPONIBLE',
       createdAt: '2026-01-01T00:00:00Z',

@@ -1,30 +1,24 @@
-export type PropertyType =
-  | 'MAISON_INDIVIDUELLE'
-  | 'CONDO'
-  | 'DUPLEX'
-  | 'TRIPLEX'
-  | 'QUADRUPLEX'
-  | 'IMMEUBLE_MULTI_UNITES'
-  | 'MAISON_AVEC_LOGEMENT_SECONDAIRE';
+import { OptionRef, PropertyStatusRef } from './option-ref.model';
 
-export type PropertyStatus = 'VACANTE' | 'OCCUPEE' | 'EN_MAINTENANCE' | 'HORS_MARCHE' | 'ARCHIVEE';
-
+// Type/statut de propriete et type d'appartement sont desormais des
+// listes configurables par organisation (voir Parametres), resolues en
+// OptionRef/PropertyStatusRef par le backend -- plus des unions de string
+// fixes. BuildingStatus et UnitStatus restent des enums fixes (hors
+// scope de cette migration).
 export type UnitStatus = 'DISPONIBLE' | 'OCCUPEE' | 'EN_MAINTENANCE';
 
 export type BuildingStatus = 'NEUF' | 'RENOVE' | 'A_RENOVER';
 
-export type UnitType = 'STUDIO' | 'UNE_CHAMBRE' | 'DEUX_CHAMBRES' | 'TROIS_CHAMBRES' | 'QUATRE_CHAMBRES_PLUS';
-
 export interface PropertyResponse {
   id: string;
   organizationId: string;
-  type: PropertyType;
+  propertyType: OptionRef;
   name: string | null;
   street: string;
   city: string;
   province: string;
   postalCode: string;
-  status: PropertyStatus;
+  propertyStatus: PropertyStatusRef;
   cadastreNumber: string | null;
   taxId: string | null;
   buildingStatus: BuildingStatus | null;
@@ -38,12 +32,13 @@ export interface PropertyResponse {
 
 export interface CreatePropertyRequest {
   organizationId: string;
-  type: PropertyType;
+  propertyTypeId: string;
   name: string | null;
   street: string;
   city: string;
   province: string;
   postalCode: string;
+  propertyStatusId: string;
   cadastreNumber: string | null;
   taxId: string | null;
   buildingStatus: BuildingStatus | null;
@@ -55,12 +50,13 @@ export interface CreatePropertyRequest {
 }
 
 export interface UpdatePropertyRequest {
-  type: PropertyType;
+  propertyTypeId: string;
   name: string | null;
   street: string;
   city: string;
   province: string;
   postalCode: string;
+  propertyStatusId: string;
   cadastreNumber: string | null;
   taxId: string | null;
   buildingStatus: BuildingStatus | null;
@@ -80,7 +76,7 @@ export interface UnitResponse {
   areaSquareMeters: number | null;
   bedrooms: number | null;
   bathrooms: number | null;
-  type: UnitType | null;
+  apartmentType: OptionRef | null;
   description: string | null;
   listedRent: number | null;
   listedSecurityDeposit: number | null;
@@ -95,7 +91,7 @@ export interface CreateUnitRequest {
   areaSquareMeters: number | null;
   bedrooms: number | null;
   bathrooms: number | null;
-  type: UnitType | null;
+  apartmentTypeId: string | null;
   description: string | null;
   listedRent: number | null;
   listedSecurityDeposit: number | null;
@@ -108,7 +104,7 @@ export interface UpdateUnitRequest {
   areaSquareMeters: number | null;
   bedrooms: number | null;
   bathrooms: number | null;
-  type: UnitType | null;
+  apartmentTypeId: string | null;
   description: string | null;
   listedRent: number | null;
   listedSecurityDeposit: number | null;
@@ -123,7 +119,7 @@ export interface UnitListingResponse {
   propertyId: string;
   unitId: string;
   unitLabel: string;
-  type: UnitType | null;
+  apartmentType: OptionRef | null;
   bedrooms: number | null;
   bathrooms: number | null;
   areaSquareMeters: number | null;
@@ -133,32 +129,6 @@ export interface UnitListingResponse {
   propertyProvince: string;
   status: UnitStatus;
 }
-
-export const PROPERTY_TYPE_LABELS: Record<string, string> = {
-  MAISON_INDIVIDUELLE: 'Maison individuelle',
-  CONDO: 'Condo',
-  DUPLEX: 'Duplex',
-  TRIPLEX: 'Triplex',
-  QUADRUPLEX: 'Quadruplex',
-  IMMEUBLE_MULTI_UNITES: 'Immeuble multi-unités',
-  MAISON_AVEC_LOGEMENT_SECONDAIRE: 'Maison avec logement secondaire',
-};
-
-export const PROPERTY_STATUS_LABELS: Record<string, string> = {
-  VACANTE: 'Vacante',
-  OCCUPEE: 'Actif',
-  EN_MAINTENANCE: 'En rénovation',
-  HORS_MARCHE: 'Hors marché',
-  ARCHIVEE: 'Archivée',
-};
-
-export const PROPERTY_STATUS_SEVERITY: Record<string, 'success' | 'warn' | 'danger' | 'secondary' | 'info'> = {
-  VACANTE: 'warn',
-  OCCUPEE: 'success',
-  EN_MAINTENANCE: 'warn',
-  HORS_MARCHE: 'secondary',
-  ARCHIVEE: 'secondary',
-};
 
 export const UNIT_STATUS_LABELS: Record<string, string> = {
   DISPONIBLE: 'Disponible',
@@ -176,12 +146,4 @@ export const BUILDING_STATUS_LABELS: Record<string, string> = {
   NEUF: 'Neuf',
   RENOVE: 'Rénové',
   A_RENOVER: 'À rénover',
-};
-
-export const UNIT_TYPE_LABELS: Record<string, string> = {
-  STUDIO: 'Studio',
-  UNE_CHAMBRE: '1 chambre',
-  DEUX_CHAMBRES: '2 chambres',
-  TROIS_CHAMBRES: '3 chambres',
-  QUATRE_CHAMBRES_PLUS: '4 chambres et plus',
 };

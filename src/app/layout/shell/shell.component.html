@@ -26,20 +26,20 @@
           (click)="closeMobileNav()"
         >
           <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
+          <span>{{ item.translationKey | translate }}</span>
         </a>
       }
     </nav>
 
     <a class="app-help-link" href="#">
       <i class="pi pi-question-circle"></i>
-      Aide
+      {{ 'shell.help' | translate }}
     </a>
   </aside>
 
   <div class="app-main">
     <header class="app-topbar">
-      <button type="button" class="hamburger-btn" aria-label="Ouvrir le menu" (click)="toggleMobileNav()">
+      <button type="button" class="hamburger-btn" [attr.aria-label]="'shell.nav.dashboard' | translate" (click)="toggleMobileNav()">
         <i class="pi pi-bars"></i>
       </button>
 
@@ -47,12 +47,17 @@
         <span class="icon-box icon-box-sm icon-box-primary"><i class="pi pi-briefcase"></i></span>
         <div>
           <div class="app-topbar-org-name">{{ session()?.organizationName }}</div>
-          <div class="app-topbar-org-sub">Organisation active</div>
+          <div class="app-topbar-org-sub">{{ 'shell.activeOrganization' | translate }}</div>
         </div>
       </div>
 
       <div class="app-topbar-actions">
-        <button type="button" class="icon-btn" aria-label="Notifications">
+        <div class="locale-switch" role="group" [attr.aria-label]="'shell.language' | translate">
+          <button type="button" class="locale-btn" [class.locale-btn--active]="locale() === 'fr'" (click)="setLocale('fr')">FR</button>
+          <button type="button" class="locale-btn" [class.locale-btn--active]="locale() === 'en'" (click)="setLocale('en')">EN</button>
+        </div>
+
+        <button type="button" class="icon-btn" [attr.aria-label]="'shell.notifications' | translate">
           <i class="pi pi-bell"></i>
         </button>
 
@@ -60,11 +65,11 @@
           <p-avatar [label]="initials()" shape="circle" styleClass="app-user-avatar" />
           <span class="user-menu-text">
             <span class="user-menu-name">{{ session()?.displayName }}</span>
-            <span class="user-menu-role">Connecté</span>
+            <span class="user-menu-role">{{ 'shell.userMenu.connected' | translate }}</span>
           </span>
           <i class="pi pi-chevron-down"></i>
         </button>
-        <p-menu #userMenu [model]="userMenuItems" [popup]="true" />
+        <p-menu #userMenu [model]="userMenuItems()" [popup]="true" />
       </div>
     </header>
 

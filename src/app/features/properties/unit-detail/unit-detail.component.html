@@ -58,7 +58,7 @@
             <div><dt>Nombre de chambres</dt><dd>{{ unit.bedrooms ?? '—' }}</dd></div>
             <div><dt>Nombre de salles de bain</dt><dd>{{ unit.bathrooms ?? '—' }}</dd></div>
             <div><dt>Surface</dt><dd>{{ unit.areaSquareMeters ? unit.areaSquareMeters + ' m²' : '—' }}</dd></div>
-            <div><dt>Type</dt><dd>{{ unit.type ? unitTypeLabels[unit.type] : '—' }}</dd></div>
+            <div><dt>Type</dt><dd>{{ i18n.optionName(unit.apartmentType) }}</dd></div>
             @if (unit.listedRent) {
               <div><dt>Loyer affiché</dt><dd>{{ unit.listedRent | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }} / mois</dd></div>
             }

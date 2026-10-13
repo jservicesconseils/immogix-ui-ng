@@ -10,7 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ApplicationResponse, SubmitApplicationRequest } from '../../core/models/application.model';
-import { UnitListingResponse, UNIT_TYPE_LABELS } from '../../core/models/property.model';
+import { UnitListingResponse } from '../../core/models/property.model';
 import { ApplicationService } from '../../core/services/application.service';
 import { PropertyService } from '../../core/services/property.service';
 
@@ -76,7 +76,6 @@ export class ApplyComponent {
 
   readonly documentSlots = DOCUMENT_SLOTS;
   readonly leaseDurationOptions = LEASE_DURATION_OPTIONS;
-  readonly unitTypeLabels = UNIT_TYPE_LABELS;
 
   readonly currentStep = signal(1);
   readonly submitting = signal(false);

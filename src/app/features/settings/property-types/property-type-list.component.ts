@@ -8,11 +8,13 @@ import { ConfirmationService, MessageService, PrimeTemplate } from 'primeng/api'
 import { AuthService } from '../../../core/auth/auth.service';
 import { PropertyTypeOptionResponse } from '../../../core/models/property-type-option.model';
 import { PropertyTypeOptionService } from '../../../core/services/property-type-option.service';
+import { I18nService } from '../../../core/i18n/i18n.service';
+import { TranslatePipe } from '../../../core/i18n/translate.pipe';
 
 @Component({
   selector: 'app-property-type-list',
   standalone: true,
-  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, PrimeTemplate],
+  imports: [ReactiveFormsModule, ButtonModule, DialogModule, InputTextModule, TableModule, PrimeTemplate, TranslatePipe],
   templateUrl: './property-type-list.component.html',
   styleUrl: './property-type-list.component.scss',
 })
@@ -22,6 +24,7 @@ export class PropertyTypeListComponent {
   private readonly propertyTypeOptionService = inject(PropertyTypeOptionService);
   private readonly messageService = inject(MessageService);
   private readonly confirmationService = inject(ConfirmationService);
+  readonly i18n = inject(I18nService);
 
   readonly session = this.auth.session;
   readonly propertyTypes = signal<PropertyTypeOptionResponse[]>([]);
@@ -31,7 +34,8 @@ export class PropertyTypeListComponent {
   readonly editingId = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required, Validators.maxLength(100)]],
+    nameEn: ['', [Validators.required, Validators.maxLength(100)]],
+    nameFr: ['', [Validators.required, Validators.maxLength(100)]],
     description: this.fb.control<string | null>(null, Validators.maxLength(300)),
   });
 
@@ -54,7 +58,7 @@ export class PropertyTypeListComponent {
       },
       error: () => {
         this.loading.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Impossible de charger les types de propriété.' });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.propertyTypes.title') });
       },
     });
   }
@@ -67,7 +71,7 @@ export class PropertyTypeListComponent {
 
   openEditDialog(propertyType: PropertyTypeOptionResponse): void {
     this.editingId.set(propertyType.id);
-    this.form.setValue({ name: propertyType.name, description: propertyType.description });
+    this.form.setValue({ nameEn: propertyType.nameEn, nameFr: propertyType.nameFr, description: propertyType.description });
     this.dialogVisible.set(true);
   }
 
@@ -82,16 +86,16 @@ export class PropertyTypeListComponent {
     this.submitting.set(true);
 
     if (editingId) {
-      this.propertyTypeOptionService.update(editingId, { name: value.name, description: value.description }).subscribe({
+      this.propertyTypeOptionService.update(editingId, { nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
         next: () => {
           this.submitting.set(false);
           this.dialogVisible.set(false);
-          this.messageService.add({ severity: 'success', summary: 'Type modifié', detail: 'Le type de propriété a été modifié.' });
+          this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.save'), detail: this.i18n.translate('settings.propertyTypes.updatedToast') });
           this.load();
         },
         error: () => {
           this.submitting.set(false);
-          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La modification a échoué.' });
+          this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.propertyTypes.updatedToast') });
         },
       });
       return;
@@ -103,28 +107,28 @@ export class PropertyTypeListComponent {
       return;
     }
 
-    this.propertyTypeOptionService.create({ organizationId, name: value.name, description: value.description }).subscribe({
+    this.propertyTypeOptionService.create({ organizationId, nameEn: value.nameEn, nameFr: value.nameFr, description: value.description }).subscribe({
       next: () => {
         this.submitting.set(false);
         this.dialogVisible.set(false);
-        this.messageService.add({ severity: 'success', summary: 'Type créé', detail: 'Le type de propriété a été ajouté.' });
+        this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.create'), detail: this.i18n.translate('settings.propertyTypes.createdToast') });
         this.load();
       },
       error: () => {
         this.submitting.set(false);
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La création du type de propriété a échoué.' });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.propertyTypes.createdToast') });
       },
     });
   }
 
   confirmDelete(propertyType: PropertyTypeOptionResponse): void {
     this.confirmationService.confirm({
-      header: 'Supprimer le type de propriété',
-      message: `Voulez-vous vraiment supprimer « ${propertyType.name} » ? Cette action est irréversible.`,
+      header: this.i18n.translate('settings.propertyTypes.deleteTitle'),
+      message: this.i18n.translate('settings.deleteConfirm.message', { name: this.i18n.optionName(propertyType) }),
       icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Supprimer',
+      acceptLabel: this.i18n.translate('common.delete'),
       acceptButtonStyleClass: 'p-button-danger',
-      rejectLabel: 'Annuler',
+      rejectLabel: this.i18n.translate('common.cancel'),
       rejectButtonStyleClass: 'p-button-text',
       accept: () => this.delete(propertyType),
     });
@@ -133,11 +137,11 @@ export class PropertyTypeListComponent {
   private delete(propertyType: PropertyTypeOptionResponse): void {
     this.propertyTypeOptionService.delete(propertyType.id).subscribe({
       next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Type supprimé', detail: 'Le type de propriété a été supprimé.' });
+        this.messageService.add({ severity: 'success', summary: this.i18n.translate('common.delete'), detail: this.i18n.translate('settings.propertyTypes.deletedToast') });
         this.load();
       },
       error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'La suppression a échoué.' });
+        this.messageService.add({ severity: 'error', summary: this.i18n.translate('common.errorTitle'), detail: this.i18n.translate('settings.propertyTypes.deletedToast') });
       },
     });
   }

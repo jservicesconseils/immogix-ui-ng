@@ -41,13 +41,17 @@
         <h2>Informations générales</h2>
         <div class="field-row cols-2">
           <div class="field">
-            <label for="type">Type de propriété <span class="required-mark">*</span></label>
-            <p-select inputId="type" formControlName="type" [options]="propertyTypeOptions" optionLabel="label" optionValue="value" placeholder="Sélectionner un type" styleClass="w-full" />
+            <label for="propertyTypeId">{{ 'properties.form.type' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
+            <p-select inputId="propertyTypeId" formControlName="propertyTypeId" [options]="propertyTypeOptions()" optionLabel="label" optionValue="value" [placeholder]="'properties.form.typePlaceholder' | translate" styleClass="w-full" />
           </div>
           <div class="field">
-            <label for="name">Nom de la propriété</label>
-            <input pInputText id="name" formControlName="name" class="w-full" placeholder="Ex : Le Domaine du Parc" />
+            <label for="propertyStatusId">{{ 'properties.form.status' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
+            <p-select inputId="propertyStatusId" formControlName="propertyStatusId" [options]="propertyStatusOptions()" optionLabel="label" optionValue="value" [placeholder]="'properties.form.statusPlaceholder' | translate" styleClass="w-full" />
           </div>
+        </div>
+        <div class="field">
+          <label for="name">{{ 'properties.form.name' | translate }}</label>
+          <input pInputText id="name" formControlName="name" class="w-full" placeholder="Ex : Le Domaine du Parc" />
         </div>
         <div class="field">
           <label for="street">Rue <span class="required-mark">*</span></label>
@@ -70,10 +74,6 @@
         <div class="field">
           <label for="description">Description</label>
           <textarea pTextarea id="description" formControlName="description" class="w-full" rows="3" placeholder="Décrivez la propriété (emplacement, commodités, particularités, etc.)" maxlength="1000"></textarea>
-        </div>
-        <div class="field-checkbox">
-          <p-checkbox formControlName="active" [binary]="true" inputId="active" />
-          <label for="active">Propriété active</label>
         </div>
       }
 

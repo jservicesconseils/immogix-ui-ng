@@ -31,8 +31,8 @@
         <h1>{{ property.name || property.street }}</h1>
         <p>{{ property.street }}, {{ property.city }} {{ property.postalCode }}</p>
         <div class="building-badges">
-          <p-tag severity="info" [value]="typeLabels[property.type]" />
-          <p-tag [severity]="statusSeverity[property.status]" [value]="statusLabels[property.status]" />
+          <p-tag severity="info" [value]="i18n.optionName(property.propertyType)" />
+          <p-tag [severity]="property.propertyStatus.severity" [value]="i18n.optionName(property.propertyStatus)" />
         </div>
       </div>
       <div class="building-header-actions">
@@ -82,7 +82,7 @@
             <div class="informations-list">
               <h3>Informations générales</h3>
               <dl>
-                <div><dt>Type</dt><dd>{{ typeLabels[property.type] }}</dd></div>
+                <div><dt>Type</dt><dd>{{ i18n.optionName(property.propertyType) }}</dd></div>
                 @if (property.yearBuilt) {
                   <div><dt>Année de construction</dt><dd>{{ property.yearBuilt }}</dd></div>
                 }
@@ -134,7 +134,7 @@
             </span>
             <p-select [options]="floorOptions()" optionLabel="label" optionValue="value" placeholder="Étage" [showClear]="true" [ngModel]="unitFloorFilter()" (ngModelChange)="unitFloorFilter.set($event)" />
             <p-select [options]="unitStatusOptions" optionLabel="label" optionValue="value" placeholder="Statut" [showClear]="true" [ngModel]="unitStatusFilter()" (ngModelChange)="unitStatusFilter.set($event)" />
-            <p-select [options]="unitTypeOptions" optionLabel="label" optionValue="value" placeholder="Type" [showClear]="true" [ngModel]="unitTypeFilter()" (ngModelChange)="unitTypeFilter.set($event)" />
+            <p-select [options]="unitTypeOptions()" optionLabel="label" optionValue="value" placeholder="Type" [showClear]="true" [ngModel]="unitTypeFilter()" (ngModelChange)="unitTypeFilter.set($event)" />
             <p-button label="Ajouter un appartement" icon="pi pi-home" (onClick)="openNewUnit()" />
           </div>
 
@@ -175,7 +175,7 @@
                   </div>
                 </td>
                 <td>{{ unit.floor ?? '—' }}</td>
-                <td>{{ unit.type ? unitTypeLabels[unit.type] : '—' }}</td>
+                <td>{{ i18n.optionName(unit.apartmentType) }}</td>
                 <td>{{ unit.bedrooms ?? '—' }}</td>
                 <td>{{ unit.bathrooms ?? '—' }}</td>
                 <td>{{ unit.areaSquareMeters ? unit.areaSquareMeters + ' m²' : '—' }}</td>

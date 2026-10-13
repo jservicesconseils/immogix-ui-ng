@@ -1,9 +1,9 @@
 <div class="page-header">
   <div>
-    <h1>Propriétés</h1>
+    <h1>{{ 'properties.list.title' | translate }}</h1>
     <p>Maisons, condos, duplex/triplex/quadruplex et immeubles multi-unités de votre portefeuille.</p>
   </div>
-  <p-button label="Nouvelle propriété" icon="pi pi-building" (onClick)="newProperty()" />
+  <p-button [label]="'properties.list.newButton' | translate" icon="pi pi-building" (onClick)="newProperty()" />
 </div>
 
 <div class="filters-bar surface-card">
@@ -19,19 +19,19 @@
     />
   </span>
   <p-select
-    [options]="typeOptions"
+    [options]="typeOptions()"
     optionLabel="label"
     optionValue="value"
-    placeholder="Type"
+    [placeholder]="'properties.list.type' | translate"
     [showClear]="true"
     [ngModel]="typeFilter()"
     (ngModelChange)="typeFilter.set($event)"
   />
   <p-select
-    [options]="statusOptions"
+    [options]="statusOptions()"
     optionLabel="label"
     optionValue="value"
-    placeholder="Statut"
+    [placeholder]="'properties.list.status' | translate"
     [showClear]="true"
     [ngModel]="statusFilter()"
     (ngModelChange)="statusFilter.set($event)"
@@ -52,12 +52,12 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Photo</th>
-        <th>Adresse</th>
-        <th>Type</th>
-        <th>Appartements</th>
+        <th>{{ 'properties.list.address' | translate }}</th>
+        <th>{{ 'properties.list.type' | translate }}</th>
+        <th>{{ 'properties.list.units' | translate }}</th>
         <th>Taux d'occupation</th>
         <th>Revenu mensuel</th>
-        <th>Statut</th>
+        <th>{{ 'properties.list.status' | translate }}</th>
         <th style="width: 4rem"></th>
       </tr>
     </ng-template>
@@ -90,11 +90,11 @@
           <div class="property-street">{{ row.property.name || row.property.street }}</div>
           <div class="property-city">{{ row.property.street }}, {{ row.property.city }} {{ row.property.postalCode }}</div>
         </td>
-        <td>{{ typeLabels[row.property.type] }}</td>
+        <td>{{ i18n.optionName(row.property.propertyType) }}</td>
         <td>{{ row.unitCount || '—' }}</td>
         <td>{{ row.occupancyRate !== null ? row.occupancyRate + '%' : '—' }}</td>
         <td>{{ row.monthlyRevenue | currency: 'CAD' : 'symbol-narrow' : '1.0-0' }}</td>
-        <td><p-tag [severity]="statusSeverity[row.property.status]" [value]="statusLabels[row.property.status]" /></td>
+        <td><p-tag [severity]="row.property.propertyStatus.severity" [value]="i18n.optionName(row.property.propertyStatus)" /></td>
         <td>
           <p-button icon="pi pi-chevron-right" [text]="true" [rounded]="true" severity="secondary" />
         </td>

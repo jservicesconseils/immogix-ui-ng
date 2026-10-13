@@ -12,28 +12,28 @@
         </span>
         <span class="login-brand-wordmark">Immogix</span>
       </div>
-      <p class="login-brand-tagline">Maisons · Immeubles locatifs · Immobilier intelligent</p>
+      <p class="login-brand-tagline">{{ 'login.brand.tagline' | translate }}</p>
 
       <div class="login-feature-grid">
         <div class="login-feature">
           <span class="login-feature-icon"><i class="pi pi-home"></i></span>
-          <span>Gestion des<br />immeubles</span>
+          <span>{{ 'login.brand.feature.management' | translate }}</span>
         </div>
         <div class="login-feature">
           <span class="login-feature-icon"><i class="pi pi-file"></i></span>
-          <span>Dépôt de dossier<br />en ligne</span>
+          <span>{{ 'login.brand.feature.application' | translate }}</span>
         </div>
         <div class="login-feature">
           <span class="login-feature-icon"><i class="pi pi-search"></i></span>
-          <span>Suivi des<br />demandes</span>
+          <span>{{ 'login.brand.feature.tracking' | translate }}</span>
         </div>
         <div class="login-feature">
           <span class="login-feature-icon"><i class="pi pi-pencil"></i></span>
-          <span>Signature<br />électronique</span>
+          <span>{{ 'login.brand.feature.signature' | translate }}</span>
         </div>
         <div class="login-feature">
           <span class="login-feature-icon"><i class="pi pi-shield"></i></span>
-          <span>Paiements<br />sécurisés</span>
+          <span>{{ 'login.brand.feature.payments' | translate }}</span>
         </div>
       </div>
 
@@ -50,7 +50,7 @@
           </g>
           <line x1="0" y1="56.5" x2="220" y2="56.5" stroke="#ffffff" stroke-width="1.5" opacity="0.65" />
         </svg>
-        <p>Une gestion plus simple<br />pour un meilleur avenir</p>
+        <p>{{ 'login.brand.skylineCaption' | translate }}</p>
       </div>
     </div>
   </div>
@@ -66,21 +66,21 @@
             <polygon points="46,68 56,72 56,92 46,88" fill="#2B7CE2" />
           </svg>
         </div>
-        <h2>Connexion</h2>
-        <p>Accédez à votre espace.</p>
+        <h2>{{ 'login.title' | translate }}</h2>
+        <p>{{ 'login.subtitle' | translate }}</p>
       </div>
 
       <div class="field">
-        <label for="email">Courriel <span class="required-mark">*</span></label>
-        <input pInputText id="email" formControlName="email" placeholder="votre@courriel.com" class="w-full" />
+        <label for="email">{{ 'login.email' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
+        <input pInputText id="email" formControlName="email" [placeholder]="'login.emailPlaceholder' | translate" class="w-full" />
       </div>
 
       <div class="field">
-        <label for="password">Mot de passe <span class="required-mark">*</span></label>
+        <label for="password">{{ 'login.password' | translate }} <span class="required-mark">{{ 'common.requiredMark' | translate }}</span></label>
         <p-password
           inputId="password"
           formControlName="password"
-          placeholder="Votre mot de passe"
+          [placeholder]="'login.passwordPlaceholder' | translate"
           [feedback]="false"
           [toggleMask]="true"
           styleClass="w-full"
@@ -91,16 +91,16 @@
       <div class="login-form-row">
         <div class="field-checkbox">
           <p-checkbox formControlName="rememberMe" [binary]="true" inputId="rememberMe" />
-          <label for="rememberMe">Se souvenir de moi</label>
+          <label for="rememberMe">{{ 'login.rememberMe' | translate }}</label>
         </div>
-        <a href="#" class="login-link" (click)="$event.preventDefault()">Mot de passe oublié ?</a>
+        <a href="#" class="login-link" (click)="$event.preventDefault()">{{ 'login.forgotPassword' | translate }}</a>
       </div>
 
-      <p-button type="submit" label="Se connecter" icon="pi pi-sign-in" styleClass="w-full" [loading]="submitting()" />
+      <p-button type="submit" [label]="'login.submit' | translate" icon="pi pi-sign-in" styleClass="w-full" [loading]="submitting()" />
 
       <p class="login-signup">
-        Vous n'avez pas de compte ?
-        <a href="#" class="login-link" (click)="$event.preventDefault()">S'inscrire</a>
+        {{ 'login.noAccount' | translate }}
+        <a href="#" class="login-link" (click)="$event.preventDefault()">{{ 'login.signup' | translate }}</a>
       </p>
     </form>
   </div>
