@@ -11,13 +11,23 @@
 // Panneau bleu : image de marque fournie telle quelle (voir login.component.html).
 // background-size: cover (jamais de letterboxing, donc aucune bordure
 // possible) ancre a gauche (background-position: left) : le bloc de
-// marque (logo/slogan/grille/skyline) occupe les ~830 premiers px des
+// marque (logo/slogan/grille/skyline) occupe les ~800 premiers px des
 // 1670px de l'image, largement sous la largeur visible meme sur un
 // panneau etroit -- seul le visuel hero decoratif a droite est rogne.
+//
+// Avec cover, la largeur d'image visible grandit avec la largeur du
+// panneau (a hauteur de viewport fixe) -- sur un ecran large, elle
+// finit par reveler la carte "Propriete" (son bord commence a x=820px
+// dans l'image source) en la coupant a mi-chemin, ce qui est pire que
+// de ne rien montrer. max-width en vh (pas en %) plafonne la largeur
+// du panneau proportionnellement a la hauteur de viewport, pour que la
+// portion visible de l'image ne depasse jamais x=800px (juste avant
+// cette carte) quelle que soit la largeur de la fenetre : 800/941 * 100vh.
 .login-brand {
   position: relative;
   flex: 1.15;
   min-height: 100%;
+  max-width: 85vh;
   background-color: #1d4ed8;
   background-image: url('/brand/login-hero.png');
   background-size: cover;
