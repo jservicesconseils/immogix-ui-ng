@@ -1,59 +1,11 @@
 <div class="login-page">
-  <div class="login-brand">
-    <div class="login-brand-content">
-      <div class="login-brand-logo">
-        <span class="login-brand-icon">
-          <svg viewBox="0 0 100 100" width="26" height="26" role="img" aria-label="Symbole Immogix">
-            <polygon points="32,28 68,10 92,45 58,55" fill="#2B7CE2" />
-            <polygon points="58,55 92,45 92,78 58,92" fill="#1D5FA8" />
-            <polygon points="24,37 46,48 46,82 24,73" fill="#1B4F88" />
-            <polygon points="46,68 56,72 56,92 46,88" fill="#2B7CE2" />
-          </svg>
-        </span>
-        <span class="login-brand-wordmark">Immogix</span>
-      </div>
-      <p class="login-brand-tagline">{{ 'login.brand.tagline' | translate }}</p>
-
-      <div class="login-feature-grid">
-        <div class="login-feature">
-          <span class="login-feature-icon"><i class="pi pi-home"></i></span>
-          <span>{{ 'login.brand.feature.management' | translate }}</span>
-        </div>
-        <div class="login-feature">
-          <span class="login-feature-icon"><i class="pi pi-file"></i></span>
-          <span>{{ 'login.brand.feature.application' | translate }}</span>
-        </div>
-        <div class="login-feature">
-          <span class="login-feature-icon"><i class="pi pi-search"></i></span>
-          <span>{{ 'login.brand.feature.tracking' | translate }}</span>
-        </div>
-        <div class="login-feature">
-          <span class="login-feature-icon"><i class="pi pi-pencil"></i></span>
-          <span>{{ 'login.brand.feature.signature' | translate }}</span>
-        </div>
-        <div class="login-feature">
-          <span class="login-feature-icon"><i class="pi pi-shield"></i></span>
-          <span>{{ 'login.brand.feature.payments' | translate }}</span>
-        </div>
-      </div>
-
-      <div class="login-brand-skyline">
-        <svg viewBox="0 0 220 60" class="login-skyline-svg" role="presentation">
-          <g fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.65">
-            <rect x="4" y="30" width="16" height="26" />
-            <rect x="24" y="18" width="14" height="38" />
-            <rect x="42" y="36" width="12" height="20" />
-            <line x1="63" y1="56" x2="63" y2="12" />
-            <circle cx="63" cy="10" r="2.5" />
-            <rect x="78" y="24" width="15" height="32" />
-            <rect x="97" y="38" width="12" height="18" />
-          </g>
-          <line x1="0" y1="56.5" x2="220" y2="56.5" stroke="#ffffff" stroke-width="1.5" opacity="0.65" />
-        </svg>
-        <p>{{ 'login.brand.skylineCaption' | translate }}</p>
-      </div>
-    </div>
-  </div>
+  <!-- Image de marque fournie telle quelle (logo, slogan, grille de
+       fonctionnalites, skyline et visuel hero deja composes dans le
+       fichier -- public/brand/login-hero.png), pas une recreation CSS.
+       Le texte y est incruste en francais : ce panneau ne suit pas le
+       changement de langue EN/FR (voir I18nService), seul le cote
+       formulaire est traduit. -->
+  <div class="login-brand" role="img" aria-label="Immogix — Find your place. Build your future. Maisons, immeubles locatifs, immobilier intelligent."></div>
 
   <div class="login-form-side">
     <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">

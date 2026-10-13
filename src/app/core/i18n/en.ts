@@ -46,13 +46,6 @@ export const EN: Record<string, string> = {
   'login.submit': 'Sign in',
   'login.noAccount': "Don't have an account?",
   'login.signup': 'Sign up',
-  'login.brand.tagline': 'Houses · Rental buildings · Smart real estate',
-  'login.brand.feature.management': 'Property management',
-  'login.brand.feature.application': 'Online application filing',
-  'login.brand.feature.tracking': 'Request tracking',
-  'login.brand.feature.signature': 'Electronic signature',
-  'login.brand.feature.payments': 'Secure payments',
-  'login.brand.skylineCaption': 'Simpler management for a better future',
 
   'settings.title': 'Settings',
   'settings.subtitle': 'Configurable lists used across your property management.',

@@ -50,13 +50,6 @@ export const FR: Record<string, string> = {
   'login.submit': 'Se connecter',
   'login.noAccount': "Vous n'avez pas de compte ?",
   'login.signup': "S'inscrire",
-  'login.brand.tagline': 'Maisons · Immeubles locatifs · Immobilier intelligent',
-  'login.brand.feature.management': 'Gestion des immeubles',
-  'login.brand.feature.application': 'Dépôt de dossier en ligne',
-  'login.brand.feature.tracking': 'Suivi des demandes',
-  'login.brand.feature.signature': 'Signature électronique',
-  'login.brand.feature.payments': 'Paiements sécurisés',
-  'login.brand.skylineCaption': 'Une gestion plus simple pour un meilleur avenir',
 
   // Parametres (ecran d'accueil + 3 listes).
   'settings.title': 'Paramètres',

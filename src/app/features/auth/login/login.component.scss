@@ -8,120 +8,25 @@
   height: 100%;
 }
 
-// Panneau bleu, aligne sur la planche de marque Immogix (variante
-// "hero") -- logo, signature, grille de fonctionnalites et skyline
-// decoratif en blanc/bleu clair sur un degrade bleu.
+// Panneau bleu : image de marque fournie telle quelle (voir login.component.html).
+// background-size: cover (jamais de letterboxing, donc aucune bordure
+// possible) ancre a gauche (background-position: left) : le bloc de
+// marque (logo/slogan/grille/skyline) occupe les ~830 premiers px des
+// 1670px de l'image, largement sous la largeur visible meme sur un
+// panneau etroit -- seul le visuel hero decoratif a droite est rogne.
 .login-brand {
   position: relative;
   flex: 1.15;
-  overflow: hidden;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #1e3a8a 100%);
-  display: flex;
-  align-items: center;
-  padding: 3.5rem;
+  min-height: 100%;
+  background-color: #1d4ed8;
+  background-image: url('/brand/login-hero.png');
+  background-size: cover;
+  background-position: left center;
+  background-repeat: no-repeat;
 
   @media (max-width: 900px) {
     display: none;
   }
-}
-
-.login-brand-content {
-  position: relative;
-  max-width: 480px;
-}
-
-// Le texte "Immogix" fait partie du logo (meme lockup que la sidebar,
-// icone + mot-symbole cote a cote), pas un titre separe.
-.login-brand-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-bottom: 1.5rem;
-}
-
-.login-brand-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.75rem;
-  height: 3.75rem;
-  flex-shrink: 0;
-
-  svg {
-    width: 3.75rem;
-    height: 3.75rem;
-  }
-}
-
-.login-brand-wordmark {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.login-brand-tagline {
-  font-size: 1.05rem;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0 0 2.5rem;
-}
-
-.login-feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.75rem 1.25rem;
-  margin-bottom: 2.75rem;
-}
-
-.login-feature {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.3;
-  color: #ffffff;
-}
-
-.login-feature-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 0.7rem;
-  background: rgba(255, 255, 255, 0.16);
-  color: #ffffff;
-  flex-shrink: 0;
-
-  .pi {
-    font-size: 1.15rem;
-  }
-}
-
-.login-brand-skyline {
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.login-skyline-svg {
-  width: 140px;
-  height: auto;
-  flex-shrink: 0;
-}
-
-.login-brand-skyline p {
-  margin: 0;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.5;
 }
 
 .login-form-side {
