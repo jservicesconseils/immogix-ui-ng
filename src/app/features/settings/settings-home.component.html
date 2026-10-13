@@ -1,0 +1,19 @@
+<div class="page-header">
+  <div>
+    <h1>Paramètres</h1>
+    <p>Listes configurables utilisées dans la gestion de vos propriétés.</p>
+  </div>
+</div>
+
+<div class="settings-grid">
+  @for (section of sections; track section.route) {
+    <a class="settings-card" [routerLink]="section.route">
+      <span class="icon-box icon-box-primary"><i [class]="section.icon"></i></span>
+      <div>
+        <h3>{{ section.title }}</h3>
+        <p>{{ section.description }}</p>
+      </div>
+      <i class="pi pi-chevron-right settings-card-arrow"></i>
+    </a>
+  }
+</div>

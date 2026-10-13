@@ -1,0 +1,59 @@
+<div class="page-header">
+  <div>
+    <h1>Types d'appartement</h1>
+    <p>Vocabulaire utilisé pour décrire vos unités (ex. studio, 3½, 4½).</p>
+  </div>
+  <p-button label="Nouveau type" icon="pi pi-plus" (onClick)="openCreateDialog()" />
+</div>
+
+<div class="surface-card">
+  <p-table [value]="apartmentTypes()" [loading]="loading()" dataKey="id" [rowHover]="true" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <th class="actions-col"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-apartmentType>
+      <tr>
+        <td>
+          <div class="entity-name">
+            <span class="icon-box icon-box-sm icon-box-primary"><i class="pi pi-home"></i></span>
+            {{ apartmentType.name }}
+          </div>
+        </td>
+        <td>{{ apartmentType.description || '—' }}</td>
+        <td class="actions-col">
+          <p-button icon="pi pi-pencil" [text]="true" severity="secondary" (onClick)="openEditDialog(apartmentType)" />
+          <p-button icon="pi pi-trash" [text]="true" severity="danger" (onClick)="confirmDelete(apartmentType)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3" class="empty-state">
+          <i class="pi pi-home"></i>
+          <p>Aucun type d'appartement pour le moment.</p>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [header]="editingId() ? 'Modifier le type' : 'Nouveau type'" [modal]="true" [(visible)]="dialogVisible" [style]="{ width: '30rem' }">
+  <form [formGroup]="form" (ngSubmit)="submit()" class="entity-form">
+    <div class="field">
+      <label for="name">Nom <span class="required-mark">*</span></label>
+      <input pInputText id="name" formControlName="name" class="w-full" placeholder="ex. 3½" />
+    </div>
+    <div class="field">
+      <label for="description">Description</label>
+      <input pInputText id="description" formControlName="description" class="w-full" placeholder="ex. Deux chambres, un salon" />
+    </div>
+    <div class="dialog-actions">
+      <p-button label="Annuler" severity="secondary" [text]="true" (onClick)="dialogVisible.set(false)" type="button" />
+      <p-button [label]="editingId() ? 'Enregistrer' : 'Créer'" icon="pi pi-check" type="submit" [loading]="submitting()" />
+    </div>
+  </form>
+</p-dialog>

@@ -151,8 +151,22 @@ export const routes: Routes = [
       },
       {
         path: 'parametres',
-        loadComponent: () => import('./features/placeholder/manager-placeholder.component').then((m) => m.ManagerPlaceholderComponent),
-        data: { title: 'Paramètres' },
+        loadComponent: () => import('./features/settings/settings-home.component').then((m) => m.SettingsHomeComponent),
+      },
+      {
+        path: 'parametres/types-appartement',
+        loadComponent: () =>
+          import('./features/settings/apartment-types/apartment-type-list.component').then((m) => m.ApartmentTypeListComponent),
+      },
+      {
+        path: 'parametres/types-propriete',
+        loadComponent: () =>
+          import('./features/settings/property-types/property-type-list.component').then((m) => m.PropertyTypeListComponent),
+      },
+      {
+        path: 'parametres/statuts-propriete',
+        loadComponent: () =>
+          import('./features/settings/property-statuses/property-status-list.component').then((m) => m.PropertyStatusListComponent),
       },
     ],
   },
